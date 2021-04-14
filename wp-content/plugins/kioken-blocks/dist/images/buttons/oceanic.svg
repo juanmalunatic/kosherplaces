@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="208px" height="120px" viewBox="0 0 208 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>oceanic</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="15.174119%" y1="0%" x2="82.8914561%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#0093E8" offset="0%"></stop>
+            <stop stop-color="#80D0C7" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="20" y="33" width="168" height="54" rx="27"></rect>
+        <filter x="-20.8%" y="-46.3%" width="141.7%" height="229.6%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="5" operator="erode" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="10" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="15" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0840048752   0 0 0 0 0.484687734   0 0 0 0 0.704506803  0 0 0 0.45 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="oceanic">
+            <rect id="Rectangle" fill="#FFFFFF" x="0" y="0" width="208" height="120"></rect>
+            <g id="Rectangle">
+                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+            </g>
+            <rect id="Rectangle" fill="#FFFFFF" x="45" y="49" width="22" height="22" rx="11"></rect>
+            <rect id="Combined-Shape" fill="#FFFFFF" x="82" y="49" width="81" height="22" rx="11"></rect>
+        </g>
+    </g>
+</svg>

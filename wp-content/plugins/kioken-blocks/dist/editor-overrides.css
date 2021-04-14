@@ -1,0 +1,137 @@
+.kt-inner > .kinetic > .editor-inner-blocks > .editor-block-list__layout > div > .block-editor-default-block-appender,
+.kioken-column > .kioken-inner-column-inner > .editor-inner-blocks > .editor-block-list__layout > div > .block-editor-default-block-appender {
+  width: calc(100% - 32px); }
+  .is-selected .kt-inner > .kinetic > .editor-inner-blocks > .editor-block-list__layout > div > .block-editor-default-block-appender, .is-selected
+  .kioken-column > .kioken-inner-column-inner > .editor-inner-blocks > .editor-block-list__layout > div > .block-editor-default-block-appender {
+    display: block;
+    background: rgba(153, 153, 153, 0.1); }
+    .is-selected .kt-inner > .kinetic > .editor-inner-blocks > .editor-block-list__layout > div > .block-editor-default-block-appender:before, .is-selected
+    .kioken-column > .kioken-inner-column-inner > .editor-inner-blocks > .editor-block-list__layout > div > .block-editor-default-block-appender:before {
+      content: '\2795';
+      color: black;
+      opacity: 0.2;
+      font-size: 1rem;
+      line-height: 2;
+      display: block;
+      top: 0;
+      left: 0;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+      z-index: -1;
+      cursor: pointer; }
+
+.kioken-column > .kioken-inner-column-inner > .editor-inner-blocks > .editor-block-list__layout > .editor-block-list__block > .block-editor-block-list__block-edit,
+.wp-block-kioken-wrapper .kt-inner > .editor-inner-blocks > .editor-block-list__layout > .editor-block-list__block > .block-editor-block-list__block-edit {
+  margin-top: 0px;
+  margin-bottom: 1rem; }
+  .kioken-column > .kioken-inner-column-inner > .editor-inner-blocks > .editor-block-list__layout > .editor-block-list__block > .block-editor-block-list__block-edit:last-child,
+  .wp-block-kioken-wrapper .kt-inner > .editor-inner-blocks > .editor-block-list__layout > .editor-block-list__block > .block-editor-block-list__block-edit:last-child {
+    margin-bottom: 0; }
+
+.block-editor-block-list__block.is-multi-selected > .block-editor-block-mover, .block-editor-block-list__block > .block-editor-block-list__block-edit > .block-editor-block-mover {
+  left: -40px; }
+
+.block-editor-block-list__layout .block-editor-block-list__block[data-align=full].is-multi-selected > .block-editor-block-mover, .block-editor-block-list__layout .block-editor-block-list__block[data-align=full] > .block-editor-block-list__block-edit > .block-editor-block-mover, .block-editor-block-list__layout .block-editor-block-list__block[data-align=wide].is-multi-selected > .block-editor-block-mover, .block-editor-block-list__layout .block-editor-block-list__block[data-align=wide] > .block-editor-block-list__block-edit > .block-editor-block-mover {
+  top: -38px; }
+
+.editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content [data-block], .editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content p,
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit [data-block],
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit p,
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit [data-block],
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit p,
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content [data-block],
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content p,
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit [data-block],
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit p,
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit [data-block],
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit p {
+  margin-top: 18px;
+  margin-bottom: 18px; }
+
+.editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content:before,
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit:before,
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit:before,
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content:before,
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit:before,
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit:before {
+  right: -4px;
+  top: -4px;
+  left: -4px;
+  bottom: -4px; }
+
+.editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content .block-editor-block-list__block > .block-editor-block-list__insertion-point,
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__insertion-point,
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__insertion-point,
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content .block-editor-block-list__block > .block-editor-block-list__insertion-point,
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__insertion-point,
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__insertion-point {
+  top: -10px; }
+
+.editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content .block-editor-block-contextual-toolbar .block-editor-block-toolbar,
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-contextual-toolbar .block-editor-block-toolbar,
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-contextual-toolbar .block-editor-block-toolbar,
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content .block-editor-block-contextual-toolbar .block-editor-block-toolbar,
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit .block-editor-block-contextual-toolbar .block-editor-block-toolbar,
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-contextual-toolbar .block-editor-block-toolbar {
+  top: 11px;
+  left: 11px; }
+
+.editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content .editor-block-list__breadcrumb,
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .editor-block-list__breadcrumb,
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .editor-block-list__breadcrumb,
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content .editor-block-list__breadcrumb,
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit .editor-block-list__breadcrumb,
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .editor-block-list__breadcrumb {
+  left: -7px;
+  top: -19px;
+  cursor: pointer; }
+  .editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content .editor-block-list__breadcrumb .components-toolbar,
+  .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .editor-block-list__breadcrumb .components-toolbar,
+  .editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .editor-block-list__breadcrumb .components-toolbar,
+  .block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content .editor-block-list__breadcrumb .components-toolbar,
+  .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit .editor-block-list__breadcrumb .components-toolbar,
+  .block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .editor-block-list__breadcrumb .components-toolbar {
+    transition: all .2s; }
+  .editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content .editor-block-list__breadcrumb:hover .components-toolbar,
+  .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .editor-block-list__breadcrumb:hover .components-toolbar,
+  .editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .editor-block-list__breadcrumb:hover .components-toolbar,
+  .block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content .editor-block-list__breadcrumb:hover .components-toolbar,
+  .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit .editor-block-list__breadcrumb:hover .components-toolbar,
+  .block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .editor-block-list__breadcrumb:hover .components-toolbar {
+    background: #333;
+    color: white; }
+
+.editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content .block-editor-block-list__block.is-multi-selected > .block-editor-block-mover,
+.editor-block-list__layout .editor-default-block-appender > .editor-default-block-appender__content .block-editor-block-list__block > .block-editor-block-list__block-edit > .block-editor-block-mover,
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-list__block.is-multi-selected > .block-editor-block-mover,
+.editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__block-edit > .block-editor-block-mover,
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-list__block.is-multi-selected > .block-editor-block-mover,
+.editor-block-list__layout > .editor-block-list__layout > .editor-block-list__block > .editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__block-edit > .block-editor-block-mover,
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content .block-editor-block-list__block.is-multi-selected > .block-editor-block-mover,
+.block-editor-block-list__layout .block-editor-default-block-appender > .block-editor-default-block-appender__content .block-editor-block-list__block > .block-editor-block-list__block-edit > .block-editor-block-mover,
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit .block-editor-block-list__block.is-multi-selected > .block-editor-block-mover,
+.block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__block-edit > .block-editor-block-mover,
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block.is-multi-selected > .block-editor-block-mover,
+.block-editor-block-list__layout > .block-editor-block-list__layout > .block-editor-block-list__block > .block-editor-block-list__block-edit .block-editor-block-list__block > .block-editor-block-list__block-edit > .block-editor-block-mover {
+  left: -36px; }
+
+.block-editor-block-list__block[data-type="kioken/column"] > .block-editor-block-list__block-edit > .block-editor-block-contextual-toolbar .block-editor-block-toolbar {
+  top: 1px !important; }
+
+.kioken-hover-button-select {
+  right: 10px !important;
+  top: 1px !important;
+  height: 24px !important;
+  background: none !important; }
+  .kioken-hover-button-select svg {
+    color: white !important;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.6); }
+  [data-type="kioken/column"] > .editor-block-list__block-edit > div > div > .kioken-hover-button-select {
+    top: 0px !important;
+    right: -7px !important; }
+    [data-type="kioken/column"] > .editor-block-list__block-edit > div > div > .kioken-hover-button-select svg {
+      border-radius: 3px 3px 0 0; }
+  .kioken-hover-button-select:hover svg {
+    background: black; }

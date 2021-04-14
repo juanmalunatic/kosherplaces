@@ -1,0 +1,114 @@
+#wpwrap {
+    background-color: #f1f1f1;
+}
+
+.jivo-form-first-col {
+    max-width: 90%;
+}
+
+.jivo-form-second-col {
+    max-width: 10%;
+}
+
+.jivo-form-bottom-link {
+    border-top-style: solid;
+    border-top-color: rgba(0,0,0,0.125);
+    border-top-width: 0.075em;
+    margin-top: 5%;
+    padding-top: 7%;
+    padding-bottom: 7%;
+}
+
+.jivo-content {
+    background-color: #f9f9f9;
+    border-radius: 2.5%;
+    border-style: solid;
+    border-color: white;
+    border-width: 0.5em
+}
+
+form.jivo-content {
+    max-width: 70%;
+    padding-left: 10%;
+    padding-right: 5%;
+}
+
+.jivo-center {
+    text-align: center;
+}
+
+.jivo-caption {
+    color: gray;
+    text-align: center;
+}
+
+a.jivo-caption {
+    color: gray;
+    text-decoration: underline;
+}
+
+div h5.jivo-form-caption {
+    color: gray;
+    text-align: center;
+}
+
+.jivo-redirect {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a.jivo-redirect {
+    color: black;
+}
+
+.jivoButton {
+    background: #00bf54;
+    color: #ffffff;
+    letter-spacing: .025em;
+    padding-bottom: .2875em;
+    padding-top: .2875em;
+    margin-bottom: 10px;
+}
+
+.jivo-black {
+    background-color: black;
+}
+
+.jivo-black:hover {
+    color: lightcoral;
+}
+
+.jivo-help-container {
+    position: relative;
+}
+
+.jivo-help {
+    position: absolute;
+    top: 2em;
+}
+
+.jivo-big {
+    margin-top: 5vh;
+}
+
+.jivo-small {
+    margin-top: 15vh;
+}
+
+.jivo-margin {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 3%;
+    justify-content: center;
+}
+
+.question-svg {
+    width: 100%;
+    height: 100%;
+    cursor: help;
+}
+
+.logo-svg {
+    width: 80%;
+    height: 80%;
+}

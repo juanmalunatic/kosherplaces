@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="188px" height="110px" viewBox="0 0 188 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>soserious</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="15.174119%" y1="0%" x2="82.8914561%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#111111" offset="0%"></stop>
+            <stop stop-color="#444444" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="10" y="10" width="188" height="100"></rect>
+        <filter x="-2.7%" y="-5.0%" width="105.3%" height="120.0%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="5" operator="erode" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="10" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="soserious" transform="translate(-10.000000, -10.000000)">
+            <rect id="Rectangle" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="208" height="120"></rect>
+            <g id="Rectangle">
+                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+            </g>
+            <rect id="Rectangle" fill="#FFFFFF" x="26" y="24" width="32" height="32" rx="16"></rect>
+            <path d="M106,79 L178,79 L178,95 L26,95 L26,86 L26,64 L106,64 L106,79 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

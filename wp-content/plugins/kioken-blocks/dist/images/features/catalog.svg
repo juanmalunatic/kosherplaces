@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="188px" height="110px" viewBox="0 0 188 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>catalog</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="10" y="10" width="188" height="100"></rect>
+        <filter x="-2.7%" y="-5.0%" width="105.3%" height="120.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="5" operator="erode" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="10" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.4 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="catalog" transform="translate(-10.000000, -10.000000)">
+            <rect id="Rectangle" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="208" height="120"></rect>
+            <g id="Rectangle">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <rect stroke="#111111" stroke-width="5" stroke-linejoin="square" fill="#FFFFFF" fill-rule="evenodd" x="12.5" y="12.5" width="183" height="95"></rect>
+            </g>
+            <rect id="Rectangle" fill="#111111" x="88" y="24" width="32" height="32" rx="16"></rect>
+            <rect id="Rectangle" fill="#111111" x="64" y="64" width="80" height="22"></rect>
+            <rect id="Rectangle-Copy" fill="#111111" x="40" y="79" width="128" height="16"></rect>
+        </g>
+    </g>
+</svg>

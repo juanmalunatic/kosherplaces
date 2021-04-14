@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="188px" height="110px" viewBox="0 0 188 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>hotlava</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="15.174119%" y1="0%" x2="82.8914561%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FF1053" offset="0%"></stop>
+            <stop stop-color="#FF4F0F" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="10" y="10" width="188" height="100" rx="12"></rect>
+        <filter x="-2.7%" y="-5.0%" width="105.3%" height="120.0%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="5" operator="erode" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="10" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 1   0 0 0 0 0.168627451   0 0 0 0 0.0588235294  0 0 0 0.6 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="hotlava" transform="translate(-10.000000, -10.000000)">
+            <rect id="Rectangle" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="208" height="120"></rect>
+            <g id="Rectangle">
+                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+            </g>
+            <rect id="Rectangle" fill="#FFFFFF" x="26" y="24" width="32" height="32" rx="16"></rect>
+            <path d="M106,79 L174,79 C176.209139,79 178,80.790861 178,83 L178,91 C178,93.209139 176.209139,95 174,95 L30,95 C27.790861,95 26,93.209139 26,91 L26,83 C26,82.8306698 26.0105217,82.6637971 26.0309469,82.5 C26.0105217,82.3362029 26,82.1693302 26,82 L26,68 C26,65.790861 27.790861,64 30,64 L102,64 C104.209139,64 106,65.790861 106,68 L106,79 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

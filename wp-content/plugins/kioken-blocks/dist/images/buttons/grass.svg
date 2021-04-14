@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="208px" height="120px" viewBox="0 0 208 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>grass</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="grass">
+            <rect id="Rectangle" fill="#FFFFFF" x="0" y="0" width="208" height="120"></rect>
+            <rect id="Rectangle" stroke="#00B44B" stroke-width="8" fill-opacity="0.148550725" fill="#00B44B" x="24" y="37" width="160" height="46" rx="23"></rect>
+            <rect id="Rectangle" fill="#00B44B" x="45" y="49" width="22" height="22" rx="11"></rect>
+            <rect id="Combined-Shape" fill="#00B44B" x="82" y="49" width="81" height="22" rx="11"></rect>
+        </g>
+    </g>
+</svg>

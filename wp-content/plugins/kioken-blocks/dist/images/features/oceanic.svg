@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="188px" height="110px" viewBox="0 0 188 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>oceanic</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="15.174119%" y1="0%" x2="111.665766%" y2="142.492188%" id="linearGradient-1">
+            <stop stop-color="#1DE297" offset="0%"></stop>
+            <stop stop-color="#7807C0" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="10" y="10" width="188" height="100" rx="12"></rect>
+        <filter x="-2.7%" y="-5.0%" width="105.3%" height="120.0%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="5" operator="erode" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="10" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.321568627   0 0 0 0 0.384313725   0 0 0 0 0.68627451  0 0 0 0.6 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="oceanic" transform="translate(-10.000000, -10.000000)">
+            <rect id="Rectangle" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="208" height="120"></rect>
+            <g id="Rectangle">
+                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+            </g>
+            <g id="Group" transform="translate(30.000000, 24.000000)" fill="#FFFFFF">
+                <rect id="Rectangle" x="120" y="0" width="32" height="32" rx="16"></rect>
+                <rect id="Rectangle" x="72" y="40" width="80" height="22" rx="4"></rect>
+                <rect id="Rectangle-Copy" x="0" y="55" width="152" height="16" rx="4"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

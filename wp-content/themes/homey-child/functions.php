@@ -9,4 +9,7 @@ function homey_enqueue_styles() {
     
 }
 add_action('wp_enqueue_scripts', 'homey_enqueue_styles');
+
+$path_child_theme = get_stylesheet_directory();
+require($path_child_theme . '/placeholdit-override.php');
 ?>

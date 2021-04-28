@@ -17,14 +17,17 @@ define('PAYPAL_CLIENT_ID', $hm_options['paypal_client_id']);
 // get access token
 $is_paypal_live = $hm_options['paypal_status'];
 $host = 'https://api.sandbox.paypal.com';
-// Check if paypal live
-if ($is_paypal_live == 'live') {
-    $host = 'https://api.paypal.com';
-}
+$access_token = '';
+if ($is_paypal_live != 'disabled'){
+    // Check if paypal live
+    if ($is_paypal_live == 'live') {
+        $host = 'https://api.paypal.com';
+    }
 
-$url = $host . '/v1/oauth2/token';
-$postArgs = 'grant_type=client_credentials';
-$access_token = homey_get_paypal_access_token($url, $postArgs);
+    $url = $host . '/v1/oauth2/token';
+    $postArgs = 'grant_type=client_credentials';
+    $access_token = homey_get_paypal_access_token($url, $postArgs);
+}
 // end of getting access token
 
 $baseUrl = sprintf(
@@ -49,7 +52,9 @@ $billing_frequency = get_post_meta($postID, 'hm_settings_billing_frequency', tru
 $listings_included = get_post_meta( $postID, 'hm_settings_listings_included', true );
 $unlimited_listings = get_post_meta( $postID, 'hm_settings_unlimited_listings', true );
 $featured_listings = get_post_meta( $postID, 'hm_settings_featured_listings', true );
+
 $stripe_package_id = get_post_meta( $postID, 'hm_settings_stripe_package_id', true );
+
 $visibility = get_post_meta( $postID, 'hm_settings_visibility', true );
 $images_per_listing = get_post_meta( $postID, 'hm_settings_images_per_listing', true );
 $unlimited_images = get_post_meta( $postID, 'hm_settings_unlimited_images', true );
@@ -66,18 +71,18 @@ $paypal_processor_link = $stripe_processor_link.'?is_homey_membership=1&payment_
 //</editor-fold>
 
 //<editor-fold desc="Stripe Related Code">
-    function createStripeProductAndPlan($hm_options)
-    {
-        $stripe_pk = $hm_options['stripe_pk'];
-        //to check if already stripe product is created?
-        $hm_stripe_product_id = get_option('hmStripePid_'.$stripe_pk);
+function createStripeProductAndPlan($hm_options) {
+    $stripe_pk = $hm_options['stripe_pk'];
+    //to check if already stripe product is created?
+    $hm_stripe_product_id = get_option('hmStripePid_'.$stripe_pk);
 
-        //We have to create stripe product if already not created
-        if(empty($hm_stripe_product_id)){
-            $data = array(
-                "name" => "Homey Memberships"
-            );
+    //We have to create stripe product if already not created
+    if(empty($hm_stripe_product_id)){
+        $data = array(
+            "name" => "Homey Memberships"
+        );
 
+        if(!empty($hm_options['stripe_sk'])){
             $stripe = new \Stripe\StripeClient(
                 $hm_options['stripe_sk']
             );
@@ -89,82 +94,82 @@ $paypal_processor_link = $stripe_processor_link.'?is_homey_membership=1&payment_
                 update_option('hmStripePid_'.$stripe_pk, $hm_stripe_product_id);
             }
         }
-
-        return $hm_stripe_product_id;
     }
 
-    $hm_stripe_product_id = createStripeProductAndPlan($hm_options);
+    return $hm_stripe_product_id;
+}
+$hm_stripe_product_id = createStripeProductAndPlan($hm_options);
 //check for valid product's plan from stripe gateway, if not then try to create them.
-    $hm_stripe_plan_id = get_option($postID.'_'.$hm_options['stripe_pk']);
+$hm_stripe_plan_id = get_option($postID.'_'.$hm_options['stripe_pk']);
 
-    if(!empty(trim($hm_stripe_product_id)) && empty(trim($hm_stripe_plan_id))){
-        //create plan on product
+if(!empty(trim($hm_stripe_product_id)) && empty(trim($hm_stripe_plan_id))){
+    //create plan on product
+    $interval_unit = "month";
+    if($billing_period == "weekly"){
+        $interval_unit = "week";
+    }if($billing_period == "daily"){
+        $interval_unit = "day";
+    }elseif ($billing_period == "monthly"){
         $interval_unit = "month";
-        if($billing_period == "weekly"){
-            $interval_unit = "week";
-        }if($billing_period == "daily"){
-            $interval_unit = "day";
-        }elseif ($billing_period == "monthly"){
-            $interval_unit = "month";
-        }elseif ($billing_period == "yearly") {
-            $interval_unit = "year";
-        }
-
-        $stripeData = array (
-            'amount' => (float) $package_price * 100,
-            'currency' => $currency,
-            'interval' => $interval_unit,
-            'interval_count' => (int) $billing_frequency,
-            'product' => $hm_stripe_product_id,
-        );
-
-        $stripe = new \Stripe\StripeClient(
-            $hm_options['stripe_sk']
-        );
-
-        $productInfo = $stripe->plans->create($stripeData);
-
-        update_option($postID.'_'.$hm_options['stripe_pk'], $productInfo->id);
-        update_post_meta($postID, 'hm_settings_stripe_package_id', $productInfo->id);
-
-        $hm_stripe_plan_id = $productInfo->id;
-        $productInfo = '';
+    }elseif ($billing_period == "yearly") {
+        $interval_unit = "year";
     }
+
+    $stripeData = array (
+        'amount' => (float) $package_price * 100,
+        'currency' => $currency,
+        'interval' => $interval_unit,
+        'interval_count' => (int) $billing_frequency,
+        'product' => $hm_stripe_product_id,
+    );
+
+    $stripe = new \Stripe\StripeClient(
+        $hm_options['stripe_sk']
+    );
+
+    $productInfo = $stripe->plans->create($stripeData);
+
+    update_option($postID.'_'.$hm_options['stripe_pk'], $productInfo->id);
+    update_post_meta($postID, 'hm_settings_stripe_package_id', $productInfo->id);
+
+    $hm_stripe_plan_id = $productInfo->id;
+    $productInfo = '';
+}
 //end for -> check for valid product's plan from stripe gateway, if not then try to create them.
 
 //</editor-fold>
 
 //<editor-fold desc="Paypal related code">
+function createProductAndPlan($access_token, $host)
+{
+    //to check if already product is created?
+    $hm_product_id = get_option('hm_prod_id_'.PAYPAL_CLIENT_ID);
 
-    function createProductAndPlan($access_token, $host)
-    {
-        //to check if already product is created?
-        $hm_product_id = get_option('hm_prod_id_'.PAYPAL_CLIENT_ID);
+    //We have to create paypal product if already not created
+    if(empty($hm_product_id)){
+        $jsonData = json_encode(array(
+            "name" => "Homey Memberships",
+            "description" => "Homey Memberships is for Host to buy different plans to post listings.",
+            "type" => "SERVICE",
+            "category" => "SOFTWARE",
+            "image_url" => 'http://dev.homey.com/wp-content/uploads/2019/01/homey-logo.png',
+            "home_url" => 'http://dev.homey.com/wp-content/uploads/2019/01/homey-logo.png'
+        ));
 
-        //We have to create paypal product if already not created
-        if(empty($hm_product_id)){
-            $jsonData = json_encode(array(
-                "name" => "Homey Memberships",
-                "description" => "Homey Memberships is for Host to buy different plans to post listings.",
-                "type" => "SERVICE",
-                "category" => "SOFTWARE",
-                "image_url" => 'http://dev.homey.com/wp-content/uploads/2019/01/homey-logo.png',
-                "home_url" => 'http://dev.homey.com/wp-content/uploads/2019/01/homey-logo.png'
-            ));
+        $productInfo = homey_execute_curl_request($host."/v1/catalogs/products", $jsonData, $access_token);
 
-            $productInfo = homey_execute_curl_request($host."/v1/catalogs/products", $jsonData, $access_token);
-
-            if(isset($productInfo['id'])){
-                update_option('hm_prod_id_'.PAYPAL_CLIENT_ID, $productInfo['id']);
-                $hm_product_id = $productInfo['id'];
-            }
+        if(isset($productInfo['id'])){
+            update_option('hm_prod_id_'.PAYPAL_CLIENT_ID, $productInfo['id']);
+            $hm_product_id = $productInfo['id'];
         }
-        return $hm_product_id;
     }
+    return $hm_product_id;
+}
 //to check if already product is created?
+if(!empty($access_token)){
     $hm_product_id = createProductAndPlan($access_token, $host);
 
-//check for valid product's plan from gateways, if not then try to create them.
+    //check for valid product's plan from gateways, if not then try to create them.
     $hm_plan_id = get_option($postID.'_'.PAYPAL_CLIENT_ID);
 
     if(!empty(trim($hm_product_id)) && empty(trim($hm_plan_id))){
@@ -232,11 +237,12 @@ $paypal_processor_link = $stripe_processor_link.'?is_homey_membership=1&payment_
         update_post_meta($postID, 'hm_settings_paypal_package_id', $productInfo['id']);
         $hm_plan_id = $productInfo['id'];
     }
+}
 //end for -> check for valid product's plan from gateways, if not then try to create them.
 //</editor-fold>
 
 ?>
-<!--<editor-fold desc="html section">-->
+    <!--<editor-fold desc="html section">-->
     <section class="main-content-area">
         <div class="container">
             <div class="row">
@@ -427,13 +433,14 @@ $paypal_processor_link = $stripe_processor_link.'?is_homey_membership=1&payment_
                                         <script src="<?php echo get_site_url(null, $homeyPlugin.'/assets/js/homey_membership_stripe.js')?>"></script>
 
                                         <div id="error-message"></div>
-                                        <input name="basePluginUrl" id="basePluginUrl" value="<?php echo '/'.$homeyPlugin;?>" type="hidden">
+                                        <input name="basePluginUrl" id="basePluginUrl" value="<?php echo get_site_url('', $homeyPlugin);?>" type="hidden">
 
 
                                     <?php } ?>
                                     <div style="display: none;" id="paypal-button-container"></div>
                                     <button id="homey_membership_payment" type="button" class="btn btn-primary btn-block"><?php echo esc_attr($homey_local['btn_process_pay']); ?></button>
                                     <!--                                </form>-->
+                                    <p class="error text-danger" id="response_statusText"></p>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -477,6 +484,8 @@ $paypal_processor_link = $stripe_processor_link.'?is_homey_membership=1&payment_
                                 sessionId: data.id
                             }).then(handleResult)
                                 .error(function (e) {
+                                    alert(e.statusText);
+                                    jQuery("#response_statusText").text(e.statusText);
                                     console.log(e);
                                 });
                         });
@@ -488,7 +497,7 @@ $paypal_processor_link = $stripe_processor_link.'?is_homey_membership=1&payment_
             </script>
         <?php endif; ?>
     </section><!-- main-content-area listing-page grid-listing-page -->
-<!--</editor-fold>-->
+    <!--</editor-fold>-->
 
 <?php
 get_footer();

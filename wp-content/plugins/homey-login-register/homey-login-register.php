@@ -3,7 +3,7 @@
 Plugin Name: Homey Login Register
 Plugin URI:  http://themeforest.net/user/favethemes
 Description: Adds login register functionality for houzez theme
-Version:     1.3.1
+Version:     1.6.5
 Author:      Waqas Riaz
 Author URI:  http://themeforest.net/user/favethemes
 License:     GPL2

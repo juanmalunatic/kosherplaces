@@ -22,7 +22,7 @@ $title_des = homey_option('404-des');
                             <div class="article-detail block-body">
                                 <h1><?php echo esc_html( $title_404 ); ?></h1>
                                 <p><?php echo wp_kses_post( $title_des ); ?></p>
-                                <p><a class="btn btn-primary" href="https://www.kosherplaces.com/register/" role="button"><?php esc_html_e('Register', 'homey'); ?></a></p>
+                                <p><a href="<?php echo esc_url(home_url('/')); ?>"><?php esc_html_e('Back to the homepage', 'homey'); ?></a></p>
                             </div>
                         </article>
                     </div>

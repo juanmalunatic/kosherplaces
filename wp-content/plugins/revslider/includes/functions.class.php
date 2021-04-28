@@ -441,27 +441,26 @@ class RevSliderFunctions extends RevSliderData {
 	 * before: RevSliderOperations::getPostTypesWithCatsForClient();
 	 */
 	public function get_post_types_with_categories_for_client(){
-		$post_types		= $this->get_post_types_with_categories();
-		$globalCounter	= 0;
-		$arrOutput		= array();
-		foreach($post_types as $postType => $arrTaxWithCats){
-
-			$arrCats = array();
-			foreach($arrTaxWithCats as $tax){
-				$taxName	= $tax['name'];
-				$taxTitle	= $tax['title'];
-				$globalCounter++;
-				$arrCats['option_disabled_'.$globalCounter] = '---- '.$taxTitle.' ----';
-				foreach($tax['cats'] as $catID=>$catTitle){
-					$arrCats[$taxName.'_'.$catID] = $catTitle;
+		$post_types	= $this->get_post_types_with_categories();
+		$c			= 0;
+		$ret		= array();
+		foreach($post_types as $pt => $taxwcats){
+			$cat = array();
+			foreach($taxwcats as $tk => $tax){
+				$taxName = $this->get_val($tax, 'name');
+				$c++;
+				$cat['option_disabled_'.$c] = '---- '. $this->get_val($tax, 'title') .' ----';
+				foreach($tax['cats'] as $catID => $catTitle){
+					$cat[$taxName.'_'.$catID] = $catTitle;
 				}
+				unset($taxwcats[$tk]);
 			}//loop tax
 
-			$arrOutput[$postType] = $arrCats;
+			$ret[$pt] = $cat;
 
 		}//loop types
 		
-		return $arrOutput;
+		return $ret;
 	}
 	
 	
@@ -664,6 +663,51 @@ class RevSliderFunctions extends RevSliderData {
 		return $image;
 	}
 	
+	/**
+	 *
+	 **/
+	public function import_media_raw($name, $id, $bitmap){
+		if(intval($id) === 0) return __('Invalid id given', 'revslider');
+		
+		$ul_dir	 = wp_upload_dir();
+		$path = $ul_dir['basedir'].'/rstemp/';
+		
+		if(preg_match('/^data:image\/(\w+);base64,/', $bitmap, $type)){
+			$data = substr($bitmap, strpos($bitmap, ',') + 1);
+			$type = strtolower($type[1]); // jpg, png, gif
+
+			if(!in_array($type, array('jpg', 'jpeg', 'gif', 'png'))){
+				return __('Image has an invalid type', 'revslider');
+			}
+			
+			if(strpos($name, '.') !== false){
+				$name = explode('.', $name);
+				$name = $name[0];
+			}
+			$name .= '_'.$id.'.'.$type;
+			$name = preg_replace("/[^a-zA-Z0-9\-\.\_]/", '', $name);
+			
+			$data = str_replace(' ', '+', $data);
+			$data = base64_decode($data);
+
+			if($data === false){
+				return __('Image has an invalid type', 'revslider');
+			}
+		}else{
+			return __('Image has invalid data', 'revslider');
+		}
+		
+		if(!is_dir($path)){
+			mkdir($path, 0777, true);
+		}
+		$return = file_put_contents($path.$name, $data);
+		if($return === false) return __('Image could not be saved', 'revslider');
+		
+		$import_image = $this->import_media($path.$name , 'video-media/');
+		
+		return $import_image;
+	}
+	
 	
 	/**
 	 * Import media from url
@@ -759,7 +803,7 @@ class RevSliderFunctions extends RevSliderData {
 					'post_parent'	 => '',
 					'post_type'		 => 'attachment',
 					'guid'			 => $ul_dir['baseurl'].'/'.$s_dir,
-					'post_mime_type' => $file_info['mime'],
+					'post_mime_type' => $this->get_val($file_info, 'mime'),
 					'post_excerpt'	 => '',
 					'post_content'	 => ''
 				);
@@ -1245,6 +1289,51 @@ class RevSliderFunctions extends RevSliderData {
 		return $obj;
 	}
 	
+	/**
+	 * get the values for the given transition
+	 **/
+	public function get_slide_transition_values($transition, $base_transitions = array()){
+		if(empty($base_transitions)) $base_transitions = $this->get_base_transitions();
+		foreach($base_transitions as $t){
+			if(!is_array($t)) continue;
+			foreach($t as $_t){
+				if(!is_array($_t)) continue;
+				foreach($_t as $name => $values){
+					if($name !== $transition) continue;
+					
+					return $values;
+				}
+			}
+		}
+		return array();
+	}
+	
+	
+	/**
+	 * get a random slide transition for the given main and grp
+	 **/
+	public function get_random_slide_transition($main, $grp, $base_transitions = array()){
+		if(empty($base_transitions)) $base_transitions = $this->get_base_transitions();
+		
+		if(!is_array($grp) && !empty($grp)) $grp = explode(',', $grp);
+		if($grp === '') $grp = array();
+		
+		$items = array();
+		foreach($base_transitions as $m => $bt){
+			if(!is_string($m) || $m === 'random' || $m === 'custom' || ($main !== 'all' && $main !== $m)) continue;
+			foreach($bt as $g => $_bt){
+				if(is_array($_bt) && $g !== 'icon' && (empty($grp) || isset($grp[$g]))){
+					foreach($_bt as $e => $__bt){
+						$items[] = $e;
+					}
+				}
+			}
+		}
+		
+		$num = (!empty($items)) ? array_rand($items, 1) : false;
+		return ($num !== false) ? $items[$num] : '';
+	}
+	
 	
 	/**
 	 * set the rs_google_font to current date, so that it will be redownloaded
@@ -1334,11 +1423,65 @@ class RevSliderFunctions extends RevSliderData {
 		if(isset($_GET['vc_action']) && $_GET['vc_action'] == 'vc_inline') return false; // WP Bakery Front Edit
 		if(function_exists('is_gutenberg_page') && is_gutenberg_page()) return true; // Gutenberg Edit with WP < 5
 		$current_screen = get_current_screen();
-		if(method_exists($current_screen, 'is_block_editor') && $current_screen->is_block_editor()) return true; //Gutenberg Edit with WP >= 5
+		if(!empty($current_screen) && method_exists($current_screen, 'is_block_editor') && $current_screen->is_block_editor()) return true; //Gutenberg Edit with WP >= 5
 		
 		return false;
 	}
-
+	
+	
+	
+	/**
+	 * get custom transitions
+	 **/
+	public function get_custom_slidetransitions(){
+		$custom = get_option('revslider_template_slidetransitions', array());
+		
+		return apply_filters('rs_get_custom_slidetransitions', $custom);
+	}
+	
+	
+	/**
+	 * get custom transitions
+	 **/
+	public function save_custom_slidetransitions($template){
+		$custom = $this->get_custom_slidetransitions();
+		
+		//empty custom templates?
+		if(empty($custom)){
+			$custom = array();
+			$new_id = 1;
+		}else{
+			$id = $this->get_val($template, 'id', 0);
+			//custom templates exist
+			$new_id = ($id > 0) ? $id : max(array_keys($custom)) + 1;
+		}
+		
+		//update or insert template
+		$custom[$new_id]['title']	= $template['obj']['title'];
+		$custom[$new_id]['preset']	= $template['obj']['preset'];
+		//return the ID the template was saved with
+		return (update_option('revslider_template_slidetransitions', $custom)) ? $new_id : false;
+	}
+	
+	
+	/**
+	 * get custom transitions
+	 **/
+	public function delete_custom_slidetransitions($template){
+		//load templates array
+		$custom = $this->get_custom_slidetransitions();
+		
+		$id = intval($this->get_val($template, 'id', 0));
+		//custom template exist
+		if($id > 0 && isset($custom[$id])){
+			//delete given ID
+			unset($custom[$id]);
+			//save the resulting templates array again
+			if(update_option('revslider_template_slidetransitions', $custom)) return true;	
+		}
+		
+		return false;
+	}
 }
 
 //class RevSliderFunctions extends rs_functions {}

@@ -8,7 +8,7 @@
 global $post;
 $sidebar_meta = array('homey_sidebar' => 'no');
 if( homey_postid_needed() ) {
-    $sidebar_meta = homey_get_sidebar_meta($post->ID);
+    $sidebar_meta = isset($post->ID) ? homey_get_sidebar_meta($post->ID) : '';
 }
 ?>
 

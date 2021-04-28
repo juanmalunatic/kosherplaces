@@ -64,7 +64,7 @@ function homey_register_required_plugins() {
 			'slug'     				=> 'homey-core',
 			'source'   				=> 'https://gethomey.io/plugins/homey-core.zip', 
 			'required' 				=> true, 
-			'version' 				=> '1.6.4', 
+			'version' 				=> '1.6.5', 
 			'external_url' 			=> '',
 		),
 		array(
@@ -72,7 +72,7 @@ function homey_register_required_plugins() {
 			'slug'     				=> 'homey-login-register',
 			'source'   				=> 'https://gethomey.io/plugins/homey-login-register.zip', 
 			'required' 				=> true, 
-			'version' 				=> '1.3.1',
+			'version' 				=> '1.6.5',
 			'external_url' 			=> '',
 		),
 		array(
@@ -93,7 +93,7 @@ function homey_register_required_plugins() {
 			'slug'     				=> 'js_composer',
 			'source'   				=> 'https://gethomey.io/plugins/js_composer.zip', 
 			'required' 				=> true, 
-			'version' 				=> '6.3.0',
+			'version' 				=> '6.5.0',
 			'external_url' 			=> '',
 		),
 
@@ -102,7 +102,7 @@ function homey_register_required_plugins() {
 			'slug'     				=> 'revslider',
 			'source'   				=> 'https://gethomey.io/plugins/revslider.zip', 
 			'required' 				=> true, 
-			'version' 				=> '6.3.3',
+			'version' 				=> '6.3.9',
 			'external_url' 			=> '',
 		),
 

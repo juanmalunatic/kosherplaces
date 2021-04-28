@@ -1031,6 +1031,16 @@ if(!function_exists('homey_featured_listing_count')) {
     }
 }
 
+if(!function_exists('homey_hm_user_listing_count')) {
+    function homey_hm_user_listing_count($user_id)
+    {
+      global $wpdb;
+      $sql = 'SELECT COUNT("ID") as total_listings FROM '.$wpdb->prefix.'posts AS p WHERE p.post_author = '.$user_id.' AND p.post_type = "listing"';
+      $total_listings = $wpdb->get_results($sql);
+      return $total_listings[0]->total_listings;
+    }
+}
+
 
 
 /**

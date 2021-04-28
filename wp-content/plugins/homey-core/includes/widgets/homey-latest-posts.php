@@ -93,7 +93,7 @@ class homey_latest_posts extends WP_Widget {
 			                        	</span>
 			                        </div>
 			                    </div>
-			                    <p><?php echo homey_get_excerpt(7); ?> <a href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read more', 'homey' ); ?></a></p>
+			                    <p><?php echo homey_get_excerpt(7); ?> <a href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read More', 'homey' ); ?></a></p>
 			                </div>
 			            </div>
 			        </div><!-- .item-wrap -->

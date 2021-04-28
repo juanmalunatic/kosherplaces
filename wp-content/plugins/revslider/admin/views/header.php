@@ -8,7 +8,8 @@
 if(!defined('ABSPATH')) exit();
 
 $rsaf	= new RevSliderFunctionsAdmin();
-$rsa	= $rsaf->get_short_library();
+$rs_od	= $rsaf->get_slider_overview();
+$rsa	= $rsaf->get_short_library($rs_od);
 $rsupd	= new RevSliderPluginUpdate();
 $rsaddon= new RevSliderAddons();
 

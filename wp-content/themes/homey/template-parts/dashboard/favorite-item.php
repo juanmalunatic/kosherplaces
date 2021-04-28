@@ -15,6 +15,7 @@ $guests         = get_post_meta( get_the_ID(), $homey_prefix.'guests', true );
 $beds           = get_post_meta( get_the_ID(), $homey_prefix.'beds', true );
 $baths          = get_post_meta( get_the_ID(), $homey_prefix.'baths', true );
 $night_price    = get_post_meta( get_the_ID(), $homey_prefix.'night_price', true );
+$listing_price  = homey_get_price();
 
 $dashboard_listings = homey_get_template_link('template/dashboard-listing.php');
 $edit_link  = add_query_arg( 'edit_listing', $post_id, $edit_link ) ;
@@ -43,8 +44,8 @@ $price_separator = homey_option('currency_separator');
     </td>
     <td data-label="<?php echo homey_option('sn_type_label') ;?>"><?php echo homey_taxonomy_simple('listing_type'); ?></td>
     <td data-label="<?php echo esc_attr($homey_local['price_label']) ;?>">
-        <?php if(!empty($night_price)) { ?>
-        <strong><?php echo homey_formatted_price($night_price, false); ?><?php echo esc_attr($price_separator); ?><?php echo homey_option('glc_day_night_label'); ?></strong><br>
+        <?php if(!empty($listing_price)) { ?>
+        <strong><?php echo homey_formatted_price($listing_price, false); ?><?php echo esc_attr($price_separator); ?><?php echo homey_get_price_label(); ?></strong><br>
         <?php } ?>
     </td>
     <td data-label="<?php echo homey_option('glc_bedrooms_label') ;?>"><?php echo esc_attr($bedrooms); ?></td>

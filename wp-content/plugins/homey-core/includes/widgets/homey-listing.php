@@ -50,7 +50,7 @@ class Homey_listing extends WP_Widget {
 		$listing_city = isset( $instance['listing_city'] ) ? $instance['listing_city'] : '';
 		$listing_area = isset( $instance['listing_area'] ) ? $instance['listing_area'] : '';
 		$listing_state = isset( $instance['listing_state'] ) ? $instance['listing_state'] : '';
-		$featured = $instance[ 'featured' ] ? 'true' : 'false';
+		$featured = $instance[ 'featured' ] == "on"? 'true' : 'false';
 
 		echo wp_kses( $before_widget, $allowed_html_array );
 

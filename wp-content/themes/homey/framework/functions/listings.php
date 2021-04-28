@@ -2549,6 +2549,15 @@ if( !function_exists('homey_generate_invoice') ):
         update_post_meta( $inserted_post_id, 'homey_invoice_type', $billionType );
         update_post_meta( $inserted_post_id, 'homey_invoice_for', $billingFor );
         update_post_meta( $inserted_post_id, 'homey_invoice_item_id', $list_pack_resv_ID );
+        //check if listing_renter == 0
+        $listing_renter = get_post_meta( $list_pack_resv_ID, 'listing_renter', true );
+
+        if($listing_renter < 1){
+            update_post_meta( $list_pack_resv_ID, 'listing_renter', $userID);
+        }
+        //end of check if listing renter == 0
+        update_post_meta( $inserted_post_id, 'homey_invoice_item_id', $list_pack_resv_ID );
+
         update_post_meta( $inserted_post_id, 'homey_invoice_price', $total_price );
         update_post_meta( $inserted_post_id, 'homey_invoice_date', $invoiceDate );
         update_post_meta( $inserted_post_id, 'homey_paypal_txn_id', $paypalTaxID );
@@ -2687,13 +2696,13 @@ if(!function_exists('homey_add_custom_period')) {
         $period_meta = array();
         
 
-        $listing_id     = intval($_POST['listing_id']);
+        $listing_id     = intval(isset($_POST['listing_id']) ? $_POST['listing_id'] : 0);
         $start_date     =  wp_kses ( $_POST['start_date'], $allowded_html );
         $end_date       =  wp_kses ( $_POST['end_date'], $allowded_html );
-        $night_price    =  floatval ( $_POST['night_price']);
-        $guest_price    =  floatval ( $_POST['additional_guest_price'] );
-        $weekend_price  =  floatval ( $_POST['weekend_price'] );
-        $the_post= get_post( $listing_id); 
+        $night_price  =  floatval ( isset($_POST['night_price']) ? $_POST['night_price'] : 0 );
+        $guest_price  =  floatval ( isset($_POST['additional_guest_price']) ? $_POST['additional_guest_price'] : 0 );
+        $weekend_price  =  floatval ( isset($_POST['weekend_price']) ? $_POST['weekend_price'] : 0 );
+        $the_post= get_post( $listing_id);
 
         $period_meta['night_price'] = $night_price; 
         $period_meta['weekend_price'] = $weekend_price;
@@ -2722,9 +2731,41 @@ if(!function_exists('homey_add_custom_period')) {
         }
 
 
-        $start_date      =   new DateTime($start_date);
+        $homey_date_format = homey_option('homey_date_format');
+
+        if($homey_date_format == 'yy-mm-dd') {
+            $h_date_format = 'Y-m-d';
+
+        } elseif($homey_date_format == 'yy-dd-mm') {
+            $h_date_format = 'Y-d-m';
+
+        } elseif($homey_date_format == 'mm-yy-dd') {
+            $h_date_format = 'm-Y-d';
+
+        } elseif($homey_date_format == 'dd-yy-mm') {
+            $h_date_format = 'd-Y-m';
+
+        } elseif($homey_date_format == 'mm-dd-yy') {
+            $h_date_format = 'm-d-Y';
+
+        } elseif($homey_date_format == 'dd-mm-yy') {
+            $h_date_format = 'd-m-Y';
+
+        }elseif($homey_date_format == 'dd.mm.yy') {
+            $h_date_format = 'd.m.Y';
+
+        } else {
+            $h_date_format = 'Y-m-d';
+        }
+
+        $start_date_obj = new DateTime();
+        $start_date = $start_date_obj->createFromFormat($h_date_format, $start_date);
+        //$start_date      =   new DateTime($start_date);
         $start_date_unix =   $start_date->getTimestamp();
-        $end_date        =   new DateTime($end_date);
+
+        $end_date_obj = new DateTime();
+        $end_date = $end_date_obj->createFromFormat($h_date_format, $end_date);
+        //$end_date        =   new DateTime($end_date);
         $end_date_unix   =   $end_date->getTimestamp();
 
         $current_period_meta_array[$start_date_unix] = $period_meta;

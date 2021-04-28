@@ -84,7 +84,7 @@ if ( ! empty( $listing_data ) && ( $listing_data->post_type == 'listing' ) ) {
                     <a href="<?php echo get_permalink($edit_listing_id); ?>" class="btn btn-dark-grey btn-preview-listing"><?php echo esc_attr($homey_local['view_btn']); ?></a>
 
                     <?php
-                    if($post_status != 'pending') {
+                    if($post_status != 'pending' || homey_is_admin()) {
                         if($post_status == 'draft') { ?>
                             <button type="button" class="btn btn-dark-grey draft-listing-validation"><?php esc_html_e('Publish', 'homey'); ?></button>
                         <?php } else { ?>

@@ -106,7 +106,7 @@ if ( ! function_exists( 'homey_get_price_by_id' ) ) {
 /*-----------------------------------------------------------------------------------*/
 if ( ! function_exists( 'homey_get_price_label' ) ) {
 
-    function homey_get_price_label() {
+    function homey_get_price_label($number = 1) {
 
         $homey_prefix = 'homey_';
         $homey_site_mode = homey_option('homey_site_mode'); // per_hour, per_day, both
@@ -118,32 +118,33 @@ if ( ! function_exists( 'homey_get_price_label' ) ) {
             $price = $price_postfix;
         } else {
             if($homey_site_mode == 'per_day') {
-                $price = homey_option('glc_day_night_label');
+                $price = $number > 1 ? homey_option('glc_day_nights_label') : homey_option('glc_day_night_label');
 
             } elseif($homey_site_mode == 'per_hour') {
-                $price = homey_option('glc_hour_label');
+                $price = $number > 1 ? homey_option('glc_hours_label') : homey_option('glc_hour_label');
 
             } elseif($homey_site_mode == 'per_week') {
-                $price = homey_option('glc_week_label');
+                $price = $number > 1 ? homey_option('glc_weeks_label') : homey_option('glc_week_label');
 
             } elseif($homey_site_mode == 'per_month') {
-                $price = homey_option('glc_month_label');
+                $price = $number > 1 ? homey_option('glc_months_label') : homey_option('glc_month_label');
 
             } elseif($homey_site_mode == 'both') {
                 if($booking_type == 'per_day') {
-                    $price = homey_option('glc_day_night_label');
+                    $price = $number > 1 ? homey_option('glc_day_nights_label') : homey_option('glc_day_night_label');
 
                 } elseif ($booking_type == 'per_hour') {
-                   $price = homey_option('glc_hour_label');
+                    $price = $number > 1 ? homey_option('glc_hours_label') : homey_option('glc_hour_label');
 
                 } elseif ($booking_type == 'per_week') {
-                   $price = homey_option('glc_week_label');
+                    $price = $number > 1 ? homey_option('glc_weeks_label') : homey_option('glc_week_label');
 
                 } elseif ($booking_type == 'per_month') {
-                   $price = homey_option('glc_month_label');
+                    $price = $number > 1 ? homey_option('glc_months_label') : homey_option('glc_month_label');
 
                 } else {
-                    $price = homey_option('glc_day_night_label');
+                    $price = $number > 1 ? homey_option('glc_day_nights_label') : homey_option('glc_day_night_label');
+
                 }
             } else {
                 $price = '';

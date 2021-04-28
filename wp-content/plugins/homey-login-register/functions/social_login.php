@@ -1,6 +1,6 @@
 <?php
 /**
- * User: waqasriaz
+ * User: saad
  * Date: 21/01/19
  * Time: 04:22 PM
  */
@@ -18,6 +18,7 @@ if( !function_exists('homey_facebook_login_oauth') ) {
         require_once $dir.'autoload.php';
 
         $dashboard_profile_link = homey_get_template_link_dash('template/dashboard-profile.php');
+        $dashboard_profile_link = str_replace( 'http://', 'https://', $dashboard_profile_link );
 
         $facebook_api    =  homey_option('facebook_api_key');
         $facebook_secret =  homey_option('facebook_secret');
@@ -46,6 +47,7 @@ if( !function_exists('homey_facebook_login') ):
         require $dir.'autoload.php';
 
         $dashboard_profile_link = homey_get_template_link_dash('template/dashboard-profile.php');
+        $dashboard_profile_link = str_replace( 'http://', 'https://', $dashboard_profile_link );
 
         $facebook_api    =  homey_option('facebook_api_key');
         $facebook_secret =  homey_option('facebook_secret');
@@ -118,23 +120,46 @@ if( !function_exists('homey_facebook_login') ):
             $username=  $username[0];
             $display_name = $fb_firstname.' '.$fb_lastname;
 
-            homey_register_user_social( $fb_email, $username, $display_name, $password, $profile_image_url );
+            $user = get_user_by( 'email', $fb_email );
 
             $info                   = array();
-            $info['user_login']     = $username;
-            $info['user_password']  = $password;
             $info['remember']       = true;
-            $user_signon            = wp_signon( $info, false );
 
-            if ( is_wp_error($user_signon) ){
-                wp_redirect( home_url() );
-                exit;
-            } else {
-                ///ueu
-                wp_redirect( $dashboard_profile_link );  // redirect to any page
-                exit;
+            if(isset($user->ID)){
+                $homeURL  = add_query_arg(
+                    array(
+                        'you_are_logged_in' => 1
+                    ),
+                    $dashboard_profile_link );
+
+                if(isset($user->user_login)){
+                    update_user_meta($user->ID, 'is_email_verified', 1);
+
+                    add_filter( 'authenticate', 'nop_auto_login', 3, 10 );
+                    nop_auto_login($user, $user->user_login, null, $homeURL );
+                }
+
+            }else {
+                homey_register_user_social($fb_email, $username, $display_name, $password, $profile_image_url);
+
+                $info['user_login'] = $username;
+                $info['user_password'] = $password;
+                $info['remember'] = true;
+
+                $wordpress_user_id = username_exists($username);
+                update_user_meta($wordpress_user_id, 'is_email_verified', 1);
+
+                $user_signon = wp_signon($info, false);
+
+                if (is_wp_error($user_signon)) {
+                    wp_redirect(home_url());
+                    exit;
+                } else {
+                    ///ueu
+                    wp_redirect($dashboard_profile_link);  // redirect to any page
+                    exit;
+                }
             }
-
 
         }
         exit;
@@ -157,6 +182,7 @@ if( !function_exists('homey_yahoo_login') ) {
         require $dir.'openid.php';
 
         $dashboard_profile_link = homey_get_template_link_dash('template/dashboard-profile.php');
+        $dashboard_profile_link = str_replace( 'http://', 'https://', $dashboard_profile_link );
 
         try {
             $openID = new LightOpenID( homey_get_domain_openid() );
@@ -198,6 +224,7 @@ if( !function_exists('homey_google_login_oauth') ):
         $google_client_secret  =  homey_option('google_secret');
         $google_developer_key  =  homey_option('google_api_key');
         $google_redirect_url   =  homey_get_template_link_dash('template/dashboard-profile.php');
+        $google_redirect_url = str_replace( 'http://', 'https://', $google_redirect_url );
 
         $dir = plugin_dir_path( __DIR__ ) . 'social/';
         require_once $dir.'google/Google_Client.php';
@@ -205,7 +232,7 @@ if( !function_exists('homey_google_login_oauth') ):
 
         $client = new Google_Client();
 
-        $client->setApplicationName('Login to Houzez');
+        $client->setApplicationName('Login to Homey');
         $client->setClientId($google_client_id);
         $client->setClientSecret($google_client_secret);
         $client->setDeveloperKey($google_developer_key);
@@ -234,10 +261,10 @@ if( !function_exists('homey_google_oauth_login') ):
         $google_client_secret  =  homey_option('google_secret');
         $google_developer_key  =  homey_option('google_api_key');
         $google_redirect_url   =  homey_get_template_link_dash('template/dashboard-profile.php');
-
+        $google_redirect_url = str_replace( 'http://', 'https://', $google_redirect_url );
 
         $gClient = new Google_Client();
-        $gClient->setApplicationName('Login to Houzez');
+        $gClient->setApplicationName('Login to Homey');
         $gClient->setClientId($google_client_id);
         $gClient->setClientSecret($google_client_secret);
         $gClient->setDeveloperKey($google_developer_key);
@@ -278,15 +305,23 @@ if( !function_exists('homey_google_oauth_login') ):
             if(isset($user->ID)){
                 $homeURL  = add_query_arg(
                     array(
-                        'already_signed_up' => 1
+                        'you_are_logged_in' => 1
                     ),
-                    home_url() );
+                    $dashboard_url );
 
-                wp_redirect( $homeURL );
+                if(isset($user->user_login)) {
+                    update_user_meta($user->ID, 'is_email_verified', 1);
+
+                    add_filter('authenticate', 'nop_auto_login', 3, 10);
+                    nop_auto_login($user, $user->user_login, null, $homeURL);
+                }
+                update_user_meta($user->ID, 'is_email_verified', 1);
             }else{
                 homey_register_user_social( $email, $username, $display_name, $user_id, $profile_image_url );
 
                 $wordpress_user_id = username_exists($username);
+                update_user_meta($wordpress_user_id, 'is_email_verified', 1);
+
                 wp_set_password( $user_id, $wordpress_user_id ) ;
 
 
@@ -294,6 +329,7 @@ if( !function_exists('homey_google_oauth_login') ):
                 $info['user_password']  = $user_id;
 
                 $user_signon            = wp_signon( $info, false );
+                update_user_meta($wordpress_user_id, 'is_email_verified', 1);
 
                 if ( is_wp_error($user_signon) ){
                     wp_redirect( home_url() );
@@ -323,6 +359,7 @@ if( !function_exists('homey_openid_login') ) {
         if ( $openID->validate() ) {
 
             $dashboard_profile_link = homey_get_template_link_dash('template/dashboard-profile.php');
+            $dashboard_profile_link = str_replace( 'http://', 'https://', $dashboard_profile_link );
             $openID_identity = wp_kses($get_vars['openid_identity'], $allowed_html);
 
             if ( strrpos($openID_identity, 'yahoo') ) {
@@ -335,21 +372,42 @@ if( !function_exists('homey_openid_login') ) {
                 $openID_identity_code = $openID_identity[1];
             }
 
-            homey_register_user_social( $email, $username, $display_name, $openID_identity_code, '' );
+            $user = get_user_by( 'email', $email );
 
-            $info = array();
-            $info['user_login'] = $username;
-            $info['user_password'] = $openID_identity_code;
-            $info['remember'] = true;
-            $user_logon = wp_signon( $info, false );
+            $info                   = array();
+            $info['remember']       = true;
 
-            if (is_wp_error( $user_logon )) {
-                wp_redirect(home_url());
-            } else {
-                ///ueu
-                wp_redirect( $dashboard_profile_link );
+            if(isset($user->ID)){
+                $homeURL  = add_query_arg(
+                    array(
+                        'you_are_logged_in' => 1
+                    ),
+                    $dashboard_profile_link );
+                if(isset($user->user_login)){
+                    update_user_meta($user->ID, 'is_email_verified', 1);
+
+                    add_filter( 'authenticate', 'nop_auto_login', 3, 10 );
+                    nop_auto_login($user, $user->user_login, null, $homeURL );
+                }
+            }else {
+                homey_register_user_social($email, $username, $display_name, $openID_identity_code, '');
+
+                $info['user_login'] = $username;
+                $info['user_password'] = $openID_identity_code;
+                $info['remember'] = true;
+
+                $wordpress_user_id = username_exists($username);
+                update_user_meta($wordpress_user_id, 'is_email_verified', 1);
+
+                $user_logon = wp_signon($info, false);
+
+                if (is_wp_error($user_logon)) {
+                    wp_redirect(home_url());
+                } else {
+                    ///ueu
+                    wp_redirect($dashboard_profile_link);
+                }
             }
-
         }
     }
 }
@@ -471,3 +529,25 @@ if(!function_exists('homey_social_after_login_redirect_page')) {
         return $login_redirect;
     }
  }
+
+function nop_auto_login( $user, $username, $password, $url=null ) {
+    if ( ! $user ) {
+        $user = get_user_by( 'email', $username );
+    }
+    if ( ! $user ) {
+        $user = get_user_by( 'login', $username );
+    }
+
+    if ( $user ) {
+        wp_set_current_user( $user->ID, $user->data->user_login );
+        wp_set_auth_cookie( $user->ID );
+        do_action( 'wp_login', $user->data->user_login, $user);
+
+        // remove filter to work proper with other login.
+        remove_filter( 'authenticate', 'nop_auto_login', 3, 10 );
+
+        wp_safe_redirect( $url );
+        exit;
+    }
+    return 0;
+}

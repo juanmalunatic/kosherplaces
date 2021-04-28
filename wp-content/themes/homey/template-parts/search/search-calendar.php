@@ -186,7 +186,7 @@ if($homey_search_type == 'per_hour') {
 	<div class="calendar-arrow"></div>
 	<?php homeySearchCalendar(); ?>
 
-	<button class="btn-link btn-clear-calendar"><?php echo esc_html__('Clear', 'homey'); ?></button>
+	<button type="button" style="z-index: 99;" class="btn-link btn-clear-calendar"><?php echo esc_html__('Clear', 'homey'); ?></button>
 
 	<div class="calendar-navigation custom-actions">
 		<button class="search-cal-prev btn btn-action pull-left disabled"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>

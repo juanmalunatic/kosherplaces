@@ -6053,7 +6053,8 @@ Redux::setSection( $opt_name, array(
             'subtitle'     => '',
             'options'  => array(
                 'booking_form'   => esc_html__( 'Booking form', 'homey' ),
-                'contact_form'   => esc_html__( 'Contact Form', 'homey' )
+                'contact_form'   => esc_html__( 'Contact Form', 'homey' ),
+                'contact_form_to_guest' => esc_html__('Contact Form To Guest and Booking To User', 'homey'),
             ),
             'default'  => 'booking_form',
         ),

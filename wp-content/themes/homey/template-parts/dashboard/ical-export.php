@@ -1,6 +1,9 @@
 <?php
 $listing_id = isset($_GET['edit_listing']) ? $_GET['edit_listing'] : '';
 $iCal_export_link = homey_generate_ical_export_link($listing_id);
+
+homey_generate_ical_dot_ics_url($listing_id);
+$ics_file_url = get_post_meta($listing_id, "icalendar_file_url_with_ics", true);
 ?>
 <div class="modal fade custom-modal" id="modal-calendar-export" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -11,6 +14,8 @@ $iCal_export_link = homey_generate_ical_export_link($listing_id);
                     <div class="form-group">
                         <label><?php echo esc_html__('Export Link', 'homey'); ?></label>
                         <p><?php echo esc_url($iCal_export_link); ?></p>
+                        <br>
+                        <p>File link: <?php echo esc_url($ics_file_url); ?></p>
                     </div>
                 </div>
             </div>

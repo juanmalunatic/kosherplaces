@@ -143,7 +143,17 @@ $homey_booking_type = homey_booking_type();
                         
                     } elseif($what_to_show == 'contact_form') {
                         get_template_part('single-listing/contact-form');
+                    }elseif($what_to_show == 'contact_form_to_guest') {
+                    if(is_user_logged_in()){
+                        if( $homey_booking_type == 'per_hour') {
+                            get_template_part('single-listing/booking/sidebar-booking-hourly');
+                        } else {
+                            get_template_part('single-listing/booking/sidebar-booking-module');
+                        }
+                    }else{
+                        get_template_part('single-listing/contact-form');
                     }
+                }
                     ?>
 
                     <?php get_sidebar('listing'); ?>

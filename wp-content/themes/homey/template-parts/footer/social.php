@@ -16,7 +16,7 @@
         <?php } ?>
 
         <?php if( homey_option('fs-googleplus') != '' ){ ?>
-            <a class="btn-bg-google" style="display: none;" target="_blank" href="<?php echo esc_url(homey_option('fs-googleplus')); ?>"><i class="fa fa-google"></i></a>
+            <a class="btn-bg-google" target="_blank" href="<?php echo esc_url(homey_option('fs-googleplus')); ?>"><i class="fa fa-google"></i></a>
         <?php } ?>
 
         <?php if( homey_option('fs-instagram') != '' ){ ?>
@@ -24,14 +24,14 @@
         <?php } ?>
 
         <?php if( homey_option('fs-pinterest') != '' ){ ?>
-            <a class="btn-bg-pinterest" style="display: none; "target="_blank" href="<?php echo esc_url(homey_option('fs-pinterest')); ?>"><i class="fa fa-pinterest"></i></a>
+            <a class="btn-bg-pinterest" target="_blank" href="<?php echo esc_url(homey_option('fs-pinterest')); ?>"><i class="fa fa-pinterest"></i></a>
         <?php } ?>
 
         <?php if( homey_option('fs-yelp') != '' ){ ?>
-            <a class="btn-bg-yelp" style="display: none; "target="_blank" href="<?php echo esc_url(homey_option('fs-yelp')); ?>"><i class="fa fa-yelp"></i></a>
+            <a class="btn-bg-yelp" target="_blank" href="<?php echo esc_url(homey_option('fs-yelp')); ?>"><i class="fa fa-yelp"></i></a>
         <?php } ?>
         <?php if( homey_option('fs-youtube') != '' ){ ?>
-            <a class="btn-bg-youtube" style="display: none;" target="_blank" href="<?php echo esc_url(homey_option('fs-youtube')); ?>"><i class="fa fa-youtube"></i></a>
+            <a class="btn-bg-youtube" target="_blank" href="<?php echo esc_url(homey_option('fs-youtube')); ?>"><i class="fa fa-youtube"></i></a>
         <?php } ?>
         
     </div>

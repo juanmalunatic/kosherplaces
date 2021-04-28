@@ -33,7 +33,7 @@ if( !function_exists('homey_scripts') ) {
 
         if (!is_404() && !is_search() && !is_tax() && !is_author()) {
             
-            $header_map_selected_city = get_post_meta($post->ID, 'homey_map_city', false);
+            $header_map_selected_city = isset($post->ID) ? get_post_meta($post->ID, 'homey_map_city', false) : '';
         }
 
         $homey_current_lang = get_locale();

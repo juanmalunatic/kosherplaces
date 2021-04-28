@@ -11,14 +11,23 @@ $ogv = substr($ogv, 0, strrpos($ogv, "."));
 $mp4 = substr($mp4, 0, strrpos($mp4, "."));
 $webm = substr($webm, 0, strrpos($webm, "."));
 $video_image = '';
+$bg_image = '';
+
 if(isset($img_url[0])){
+    $bg_image = $img_url[0];
     $video_image = substr($img_url[0], 0, strrpos($img_url[0], "."));
 }
 
 ?>
+<style>
+    .splash-video-background {
+        background-image: url('<?php echo esc_url($bg_image); ?>');
+        background-size: cover;
+    }
+</style>
 <section class="top-banner-wrap <?php homey_banner_fullscreen(); ?>">
 
-    <div id="video-background" class="video-background splash-video-background" data-vide-bg="mp4: <?php echo esc_url($mp4); ?>, webm: <?php echo esc_url($webm); ?>, ogv: <?php echo esc_url($ogv); ?>, poster: <?php echo esc_url($video_image); ?>" data-vide-options="position: 0% 50%">
+    <div id="video-background" class="video-background splash-video-background" data-vide-bg="mp4: <?php echo esc_url($mp4); ?>, webm: <?php echo esc_url($webm); ?>, ogv: <?php echo esc_url($ogv); ?>, poster: <?php echo esc_url($bg_image); ?>" data-vide-options="position: 0% 50%">
     </div>
 
     <div class="banner-caption <?php homey_banner_search_class(); ?>">

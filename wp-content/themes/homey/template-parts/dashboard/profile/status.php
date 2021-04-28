@@ -30,7 +30,7 @@ $is_email = $author_info['is_email'];
             <div class="block-col block-col-50">
                 <div class="block-icon text-secondary"><i class="fa fa-envelope-open-o"></i></div>
                 <p><strong><?php esc_html_e('Email Address', 'homey'); ?></strong></p>
-                <?php if($author_info['is_email_verified']) { ?>
+                <?php if(homey_is_admin() || $author_info['is_email_verified']) { ?>
                     <p class="text-success"><i class="fa fa-check-circle-o"></i> <?php esc_html_e('VERIFIED', 'homey'); ?></p>
                 <?php } else { ?>
                     <p class="text-danger"><i class="fa fa-times-circle"></i></p>

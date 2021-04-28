@@ -7,6 +7,8 @@
 
 if(!defined('ABSPATH')) exit();
 
+global $rs_do_init_action;
+
 $rs_do_init_action = true;
 
 class RevSliderSlider extends RevSliderFunctions {
@@ -2050,25 +2052,25 @@ class RevSliderSlider extends RevSliderFunctions {
 		$_slides	 = array();
 		$max_allowed = 999999;
 		$sourcetype	 = $this->get_param('sourcetype', 'gallery');
-		$additions	 = array('fb_type' => 'album');
+		$additions	 = array();
 		
 		switch($sourcetype){
 			case 'facebook':
 				$facebook = new RevSliderFacebook($this->get_param(array('source', 'facebook', 'transient'), '1200'));
 				if($this->get_param(array('source', 'facebook', 'typeSource'), 'timeline') == 'album'){
-					$posts = $facebook->get_photo_set_photos($this->get_param(array('source', 'facebook', 'album')), $this->get_param(array('source', 'facebook', 'count'), 10), $this->get_param(array('source', 'facebook', 'appId')));
+					$posts = $facebook->get_photo_set_photos(
+						$this->get_param(array('source', 'facebook', 'appId')),
+						$this->get_param(array('source', 'facebook', 'album')),
+						$this->get_param(array('source', 'facebook', 'count'), 8)
+					);
+					$additions['fb_type']	 = 'album';
 				}else{
-					$user_id = $facebook->get_user_from_url($this->get_param(array('source', 'facebook', 'pageURL')));
-					$posts = $facebook->get_photo_feed($user_id, $this->get_param(array('source', 'facebook', 'appId')), $this->get_param(array('source', 'facebook', 'count'), 10));
-					$additions['fb_type']	 = $this->get_param(array('source', 'facebook', 'typeSource'), 'timeline');
-					$additions['fb_user_id'] = $user_id;
-				}
-				
-				if(!empty($posts)){
-					foreach($posts as $k => $p){
-						if(!isset($p->status_type)) continue;
-						if(in_array($p->status_type, array('wall_post'))) unset($posts[$k]);
-					}
+					$posts = $facebook->get_photo_feed(
+						$this->get_param(array('source', 'facebook', 'appId')),
+						$this->get_param(array('source', 'facebook', 'page_id')),
+						$this->get_param(array('source', 'facebook', 'count'), 8)
+					);
+					$additions['fb_type'] = 'timeline';
 				}
 				
 				$max_posts	 = $this->get_param(array('source', 'facebook', 'count'), '25');
@@ -2149,7 +2151,13 @@ class RevSliderSlider extends RevSliderFunctions {
 				$max_allowed = 60;
 			break;
 			default:
-				$this->throw_error(__('Sorry, this Social Stream cannot be displayed.', 'revslider'));
+				global $rs_preview_mode;
+				if($rs_preview_mode){
+					$admin = new RevSliderAdmin();
+					$admin->ajax_response_error(__('Some Settings in Slider <strong>Source may not complete</strong>.<br>Please Complete All Settings in Slider Sources.', 'revslider'));
+				}else{
+					$this->throw_error(__('Sorry, this Social Stream cannot be displayed.', 'revslider'));
+				}
 			break;
 		}
 		
@@ -2164,7 +2172,15 @@ class RevSliderSlider extends RevSliderFunctions {
 		
 		$posts = apply_filters('revslider_post_mod_stream_data', $posts, $sourcetype, $this->id);
 		
-		if(empty($posts)) $this->throw_error(__('Sorry, this Social Stream cannot be displayed.', 'revslider'));
+		if(empty($posts)){
+			global $rs_preview_mode;
+			if($rs_preview_mode){
+				$admin = new RevSliderAdmin();
+				$admin->ajax_response_error(__('Some Settings in Slider <strong>Source may not complete</strong>.<br>Please Complete All Settings in Slider Sources.', 'revslider'));
+			}else{
+				$this->throw_error(__('Sorry, this Social Stream cannot be displayed.', 'revslider'));
+			}
+		}
 		
 		$i = 0;
 		$tk = 0;
@@ -2270,18 +2286,18 @@ class RevSliderSlider extends RevSliderFunctions {
 	 * get the Slider Overview Structure
 	 * @since: 6.0
 	 */
-	public function get_overview_data($slider = false, $slides = false){
+	public function get_overview_data($slider = false, $slides = false, $slide_ids = false){
 		//if we are pre 6.0.0, we have to create the data from the old data instead of the new format!
 		
 		$favorite	= new RevSliderFavorite();
-		$slider		= ($slider == false) ? $this : $slider;
+		$slider		= ($slider == false || $slider instanceof RevSliderFolder) ? $this : $slider;
 		$post60		= (version_compare($slider->get_setting('version', '1.0.0'), '6.0.0', '<')) ? false : true;
 		$id			= 0;
-		$slide_ids	= array();
 		$slides		= ($slides !== false) ? $slides :  $slider->get_slides();
 		$type		= ($post60) ? $slider->get_type() : $this->get_type_pre60();
 		$image		= '';
 		$sid		= $slider->get_id();
+		$do_ids		= ($slide_ids !== false) ? false : true;
 		
 		if(!empty($slides)){
 			foreach($slides as $slide){
@@ -2289,8 +2305,11 @@ class RevSliderSlider extends RevSliderFunctions {
 				$image	= ($post60) ? $slide->get_overview_image_attributes($type) : $slide->get_overview_image_attributes_pre60($type);
 				break;
 			}
-			foreach($slides as $slide){
-				$slide_ids[] = $slide->get_id();
+			if($do_ids){
+				$slide_ids = array();
+				foreach($slides as $slide){
+					$slide_ids[] = $slide->get_id();
+				}
 			}
 		}
 		

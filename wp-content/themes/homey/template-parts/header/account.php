@@ -48,120 +48,81 @@ $reservation_payment = homey_option('reservation_payment');
         <ul>
             <?php 
             if( !empty($dashboard) ) {
-                echo '<li>
-                        <a href="'.esc_url($dashboard).'">
-                            <i class="fa fa-home"></i> '.$homey_local['m_dashboard_label'].'
-                        </a>
-                    </li>';
+                echo '<li><a href="'.esc_url($dashboard).'"><i class="fa fa-home"></i>'.$homey_local['m_dashboard_label'].'</a></li>';
             }
 
             if( !empty($dashboard_profile) ) {
-                echo '<li>
-                    <a href="'.esc_url($dashboard_profile).'">
-                        <i class="fa fa-user-o"></i> '.$homey_local['m_profile_label'].'
-                    </a>
-                </li>';
-                
+                echo '<li><a href="'.esc_url($dashboard_profile).'"><i class="fa fa-user-o"></i>'.$homey_local['m_profile_label'].'</a></li>';
             }
 
             if(!homey_is_renter()) {
                 if( !empty($dashboard_listings) ) {
-                    echo '<li>
-                        <a href="'.esc_url($dashboard_listings).'"><i class="fa fa-th-list"></i> '.$homey_local['m_listings_label'].'</a>
-                    </li>';
+                    echo '<li><a href="'.esc_url($dashboard_listings).'"><i class="fa fa-th-list"></i>'.$homey_local['m_listings_label'].'</a></li>';
                 }
 
                 if( !empty($dashboard_add_listing) ) {
-                    echo '<li>
-                        <a href="'.esc_url($dashboard_add_listing).'"><i class="fa fa-plus-circle"></i> '.$homey_local['m_add_listing_label'].' </a>
-                    </li>';
+                    echo '<li><a href="'.esc_url($dashboard_add_listing).'"><i class="fa fa-plus-circle"></i>'.$homey_local['m_add_listing_label'].' </a></li>';
                 }
             }
 
-
             if( !empty($dashboard_reservations) ) {
-
                 if(homey_is_renter()) {
-                    echo '<li>
-                        <a href="'.esc_url($dashboard_reservations).'"><i class="fa fa-calendar"></i>  '.$homey_local['m_reservation_label'].'</a>
-                    </li>';
+                    echo '<li><a href="'.esc_url($dashboard_reservations).'"><i class="fa fa-calendar"></i>'.$homey_local['m_reservation_label'].'</a></li>';
                 } elseif(homey_is_admin()) {
-                    echo '<li>
-                        <a href="'.esc_url($dashboard_reservations).'"><i class="fa fa-calendar"></i>  '.esc_html__('Bookings', 'homey').'</a>
-                    </li>';
+                    echo '<li><a href="'.esc_url($dashboard_reservations).'"><i class="fa fa-calendar"></i>'.esc_html__('Bookings', 'homey').'</a></li>';
                 } else {
-                    echo '<li>
-                        <a href="'.esc_url($dashboard_reservations).'"><i class="fa fa-calendar"></i>  '.esc_html__('My Bookings', 'homey').'</a>
-                    </li>';
+                    echo '<li><a href="'.esc_url($dashboard_reservations).'"><i class="fa fa-calendar"></i>'.esc_html__('My Bookings', 'homey').'</a></li>';
                 }
             }
 
             if( !empty($dashboard_host_reservations) && !homey_is_renter()) {
-                echo '<li>
-                    <a href="'.esc_url($dashboard_host_reservations).'"><i class="fa fa-calendar"></i>  '.esc_html__('My Reservations', 'homey').'</a>
-                </li>';
+                echo '<li><a href="'.esc_url($dashboard_host_reservations).'"><i class="fa fa-calendar"></i>'.esc_html__('My Reservations', 'homey').'</a></li>';
             }
 
             if($enable_wallet != 0) {
                 if($reservation_payment == 'percent' || $reservation_payment == 'full') {
                     if(homey_is_host()) {
                         if( !empty($dashboard_wallet) ) {
-                            echo '<li>
-                                <a href="'.esc_url($dashboard_wallet).'"><i class="fa fa-money"></i> '.esc_html__('Wallet', 'homey').'</a>
-                            </li>';
+                            echo '<li><a href="'.esc_url($dashboard_wallet).'"><i class="fa fa-money"></i>'.esc_html__('Wallet', 'homey').'</a></li>';
                         }
                     }
 
                     if(homey_is_renter()) {
                         if( !empty($dashboard_wallet) ) {
-                            echo '<li>
-                                <a href="'.esc_url($dashboard_wallet).'"><i class="fa fa-money"></i> '.esc_html__('Wallet', 'homey').'</a>
-                            </li>';
+                            echo '<li><a href="'.esc_url($dashboard_wallet).'"><i class="fa fa-money"></i>'.esc_html__('Wallet', 'homey').'</a></li>';
                         }
                     }
 
                     if(homey_is_admin()) {
                         if( !empty($dashboard_wallet) ) {
-                            echo '<li>
-                                <a href="'.esc_url($payouts_page_link).'"><i class="fa fa-money"></i> '.esc_html__('Payouts', 'homey').'</a>
-                            </li>';
+                            echo '<li><a href="'.esc_url($payouts_page_link).'"><i class="fa fa-money"></i>'.esc_html__('Payouts', 'homey').'</a></li>';
                         }
                     }
                 }
             }
 
             if( !empty($dashboard_favorites) ) {
-                echo '<li>
-                    <a href="'.esc_url($dashboard_favorites).'"><i class="fa fa-heart-o"></i> '.$homey_local['m_favorites_label'].' </a>
-                </li>';
+                echo '<li><a href="'.esc_url($dashboard_favorites).'"><i class="fa fa-heart-o"></i>'.$homey_local['m_favorites_label'].' </a></li>';
             }
 
             if( !empty($dashboard_invoices) ) {
-                echo '<li>
-                    <a href="'.esc_url($dashboard_invoices).'"><i class="fa fa-file"></i> '.$homey_local['m_invoices_label'].' </a>
-                </li>';
+                echo '<li><a href="'.esc_url($dashboard_invoices).'"><i class="fa fa-file"></i>'.$homey_local['m_invoices_label'].' </a></li>';
             }
 
             if(homey_is_admin()) {
                 if( !empty($all_users) ) {
-                    echo '<li class="">
-                        <a href="'.esc_url($all_users).'"><i class="fa fa-users"></i> '.esc_html__('Users', 'homey').'</a>
-                    </li>';
+                    echo '<li class=""><a href="'.esc_url($all_users).'"><i class="fa fa-users"></i>'.esc_html__('Users', 'homey').'</a></li>';
                 }
             }
 
 
             if( !empty($dashboard_messages) ) {
-                echo '<li>
-                    <a href="'.esc_url($dashboard_messages).'"><i class="fa fa-comments-o"></i> '.$homey_local['m_messages_label'].'
+                echo '<li><a href="'.esc_url($dashboard_messages).'"><i class="fa fa-comments-o"></i>'.$homey_local['m_messages_label'].'
                     '.homey_messages_notification().'
-                    </a>
-                </li>';
+                    </a></li>';
             }
 
-            echo '<li>
-                <a href="' . wp_logout_url(home_url('/')) . '"><i class="fa fa-sign-out"></i> '.$homey_local['m_logout_label'].' </a>
-            </li>';
+            echo '<li><a href="' . wp_logout_url(home_url('/')) . '"><i class="fa fa-sign-out"></i>'.$homey_local['m_logout_label'].' </a></li>';
             ?>
         </ul>
     </div>

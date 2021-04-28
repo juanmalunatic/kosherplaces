@@ -23,14 +23,14 @@ if($min_book_days > 1) {
                         <?php if($hide_labels['sn_min_stay_is'] != 1 && !empty($min_book_days)) { ?>
                         <li>
                             <i class="fa fa-calendar-o" aria-hidden="true"></i> 
-                            <?php echo esc_attr(homey_option('sn_min_stay_is'));?> <strong><?php echo esc_attr($min_book_days); ?> <?php echo esc_attr(homey_get_price_label());?></strong>
+                            <?php echo esc_attr(homey_option('sn_min_stay_is'));?> <strong><?php echo esc_attr($min_book_days); ?> <?php echo esc_attr(homey_get_price_label($min_book_days));?></strong>
                         </li>
                         <?php } ?>
 
                         <?php if($hide_labels['sn_max_stay_is'] != 1 && !empty($max_book_days)) { ?>
                         <li>
                             <i class="fa fa-calendar-o" aria-hidden="true"></i> 
-                            <?php echo esc_attr(homey_option('sn_max_stay_is'));?> <strong><?php echo esc_attr($max_book_days); ?> <?php echo esc_attr(homey_get_price_label());?></strong>
+                            <?php echo esc_attr(homey_option('sn_max_stay_is'));?> <strong><?php echo esc_attr($max_book_days); ?> <?php echo esc_attr(homey_get_price_label($max_book_days));?></strong>
                         </li>
                         <?php } ?>
                     </ul>

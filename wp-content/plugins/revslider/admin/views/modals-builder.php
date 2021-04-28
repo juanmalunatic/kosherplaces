@@ -24,7 +24,7 @@ if(!defined('ABSPATH')) exit();
 					<div id="add_skin_color" class="basic_action_button layerinput autosize rightbutton"><i class="material-icons">color_lens</i><?php _e('Add Skin', 'revslider');?></div><div class="tp-clearfix"></div>
 					<div class="div40"></div>
 					<div class="global_sas_wrap">
-						<label_a style="max-width:none; width:auto;"><?php _e('Show this Modal on Editor launch', 'revslider');?></label_a><input type="checkbox" id="sr_show_glob_skins" class="sliderinput easyinit" data-r="skins.colorsAtStart" checked="checked">
+						<label_a style="max-width:none; width:auto;"><?php _e('Show this Modal on Editor launch', 'revslider');?></label_a><input type="checkbox" id="sr_show_glob_skins" class="sliderinput easyinit" data-r="skins.colorsAtStart">
 					</div>
 				</div>
 			</div>
@@ -614,7 +614,7 @@ if(!defined('ABSPATH')) exit();
 								<div class="mdl_group_header"><i class="material-icons">shopping_cart</i><?php _e('WooCommerce Stock', 'revslider');?><i class="material-icons accordiondrop">arrow_drop_down</i></div>
 								<div data-val="{{wc_sku}}" class="mdl_group_member"><div class="mdl_left_content"><i class="material-icons">dashboard</i><?php _e("SKU", 'revslider');?></div><div class="mdl_right_content">{{wc_sku}}</div><div class="mdl_placeholder_content"><?php _e('457819', 'revslider');?></div></div>
 								<div data-val="{{wc_stock}}" class="mdl_group_member"><div class="mdl_left_content"><i class="material-icons">dashboard</i><?php _e("In Stock", 'revslider');?></div><div class="mdl_right_content">{{wc_stock}}</div><div class="mdl_placeholder_content"><?php _e('5', 'revslider');?></div></div>
-								<div data-val="{{wc_stock_quantity}}" class="mdl_group_member"><div class="mdl_left_content"><i class="material-icons">dashboard</i><?php _e("Stock Quantity", 'revslider');?></div><div class="mdl_right_content">{{wc_stock_quantity}}</div><div class="mdl_placeholder_content"><?php _e('Package', 'revslider');?></div></div>
+								<div data-val="{{wc_stock_quantity}}" class="mdl_group_member"><div class="mdl_left_content"><i class="material-icons">dashboard</i><?php _e("Stock Quantity", 'revslider');?></div><div class="mdl_right_content">{{wc_stock_quantity}}</div><div class="mdl_placeholder_content"><?php _e('5', 'revslider');?></div></div>
 							</div>
 							<div class="mdl_group">
 								<div class="mdl_group_header"><i class="material-icons">shopping_cart</i><?php _e('WooCommerce Ratings', 'revslider');?><i class="material-icons accordiondrop">arrow_drop_down</i></div>
@@ -669,12 +669,14 @@ if(!defined('ABSPATH')) exit();
 							</div>
 
 							<!-- INSTAGRAM -->
+							<!--
 							<div class="mdl_group">
 								<div class="mdl_group_header"><i class="fa__icons fa-instagram"></i><?php _e('Instagram Extras', 'revslider');?><i class="material-icons accordiondrop">arrow_drop_down</i></div>
 								<div data-val="{{date}}" class="mdl_group_member"><div class="mdl_left_content"><i class="fa__icons fa-instagram"></i><?php _e("Date created", 'revslider');?></div><div class="mdl_right_content">{{date}}</div><div class="mdl_placeholder_content"><?php _e('08.03.2018', 'revslider');?></div></div>
-								<!--div data-val="{{likes}}" class="mdl_group_member"><div class="mdl_left_content"><i class="fa__icons fa-instagram"></i><?php _e("Number of Likes", 'revslider');?></div><div class="mdl_right_content">{{likes}}</div><div class="mdl_placeholder_content"><?php _e('12', 'revslider');?></div></div-->
+								<div data-val="{{likes}}" class="mdl_group_member"><div class="mdl_left_content"><i class="fa__icons fa-instagram"></i><?php _e("Number of Likes", 'revslider');?></div><div class="mdl_right_content">{{likes}}</div><div class="mdl_placeholder_content"><?php _e('12', 'revslider');?></div></div>
 								<div data-val="{{num_comments}}" class="mdl_group_member"><div class="mdl_left_content"><i class="fa__icons fa-instagram"></i><?php _e("Number of Comments", 'revslider');?></div><div class="mdl_right_content">{{num_comments}}</div><div class="mdl_placeholder_content"><?php _e('19', 'revslider');?></div></div>
 							</div>
+							-->
 
 							<!-- TWITTER -->
 							<div class="mdl_group">
@@ -877,6 +879,9 @@ if(!defined('ABSPATH')) exit();
 
 							<!-- DELAY -->
 							<div id="laction_delay"><label_a><?php _e('Action Delay', 'revslider');?></label_a><input class="easyinit actioninput" data-numeric="true" data-allowed="ms" type="text" id="layer_action_delay" data-r="actions.action.#actionindex#.action_delay" placeholder="0"></div>
+
+							<!-- REPEAT DELAY -->
+							<div id="lraction_delay"><label_a><?php _e('Trigger Repeat Delay', 'revslider');?></label_a><input class="easyinit actioninput" data-numeric="true" data-allowed="ms" type="text" id="layer_action_repeat" data-r="actions.action.#actionindex#.action_repeats" placeholder="0"></div>
 						</div><!-- END OF INPUT FIELD LIST OF THE SELECTED ACTION -->
 					</div>
 				</div>

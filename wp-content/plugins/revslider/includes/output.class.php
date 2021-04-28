@@ -12,6 +12,7 @@ $rs_material_icons_css = false;
 $rs_material_icons_css_parsed = false;
 $rs_slider_serial = 0;
 $rs_ids_collection = array();
+$rs_preview_mode = false;
 
 class RevSliderOutput extends RevSliderFunctions {
 	
@@ -486,7 +487,9 @@ class RevSliderOutput extends RevSliderFunctions {
 	 * set the preview_mode
 	 */
 	public function set_preview_mode($preview_mode){
+		global $rs_preview_mode;
 		$this->preview_mode = apply_filters('revslider_set_preview_mode', $preview_mode, $this);
+		$rs_preview_mode = $this->preview_mode;
 	}
 	
 	/**
@@ -751,7 +754,7 @@ class RevSliderOutput extends RevSliderFunctions {
 	 **/
 	public function get_slider_wrapper_div(){
 		$type		= $this->slider->get_param('layouttype');
-		$position	= $this->slider->get_param(array('layout', 'position', 'align'), 'center');
+		$position	= 'center'; //$this->slider->get_param(array('layout', 'position', 'align'), 'center');
 		$bg_color	= esc_attr(trim($this->slider->get_param(array('layout', 'bg', 'color'))));
 		$max_width	= $this->slider->get_param(array('size', 'maxWidth'), '0');
 		$class		= $this->slider->get_param('wrapperclass','');		
@@ -1147,7 +1150,7 @@ class RevSliderOutput extends RevSliderFunctions {
 		echo $this->get_html_invisible();
 		echo $this->get_html_anim();
 		echo $this->get_html_random_animations();
-		echo $this->get_html_first_anim($index);
+		echo $this->get_html_alt_transitions();
 
 		echo $this->get_html_slide_loop();
 		echo $this->get_html_media_filter();
@@ -1876,7 +1879,8 @@ class RevSliderOutput extends RevSliderFunctions {
 			echo '">';
 		}
 		
-		echo ($special_type === false && $layertype !== 'video') ? apply_filters('revslider_layer_content', stripslashes($html_layer), $html_layer, $this->slider->get_id(), $this->slide, $layer).' ' : '';
+		//echo ($special_type === false && $layertype !== 'video') ? apply_filters('revslider_layer_content', stripslashes($html_layer), $html_layer, $this->slider->get_id(), $this->slide, $layer).' ' : '';
+		echo ($special_type === false && $layertype !== 'video') ? apply_filters('revslider_layer_content', $html_layer, $html_layer, $this->slider->get_id(), $this->slide, $layer).' ' : '';
 		
 		if($toggle_data['allow'] === true){
 			echo '</div>';
@@ -2374,20 +2378,37 @@ class RevSliderOutput extends RevSliderFunctions {
 			$text = $this->get_val($layer, 'text', '');
 			$text_toggle = $this->get_val($layer, array('toggle', 'text'), '');
 			if(strpos($text, 'material-icons') !== false || strpos($text_toggle, 'material-icons') !== false){
-				$rs_material_icons_css = "/* 
-ICON SET
-*/
-@font-face {
+				$gs = $this->get_global_settings();
+				if($this->get_val($gs, 'fontdownload', 'off') === 'off'){
+					$font_face = "@font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;  
   src: url(//fonts.gstatic.com/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');
-}
+}";
+				}else{
+					$font_face = "@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;  
+  
+  src: local('Material Icons'),
+    	local('MaterialIcons-Regular'),
+  		url(".RS_PLUGIN_URL."public/assets/fonts/material/MaterialIcons-Regular.woff2) format('woff2'),
+  		url(".RS_PLUGIN_URL."public/assets/fonts/material/MaterialIcons-Regular.woff) format('woff'),  
+		url(".RS_PLUGIN_URL."public/assets/fonts/material/MaterialIcons-Regular.ttf) format('truetype');
+}";
+				}
+				$rs_material_icons_css = "/* 
+ICON SET 
+*/
+".$font_face."
 
 rs-module .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
-  font-style: normal;  
+  font-style: normal;
+	font-size: inherit;
   display: inline-block;  
   text-transform: none;
   letter-spacing: normal;
@@ -3057,7 +3078,8 @@ rs-module .material-icons {
 							'offset' => $this->get_val($action, 'scrollunder_offset', ''),								
 							'sp'	 => $this->get_val($action, 'action_speed', '300'),
 							'e'	 	 => $this->get_val($action, 'action_easing', 'none'),
-							'd'		 => $this->get_val($action, 'action_delay', '')
+							'd'		 => $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 						$easing = $this->get_val($action, 'action_easing', 'none');
 						$this->easings[$easing] = $easing;
@@ -3074,7 +3096,8 @@ rs-module .material-icons {
 								'a'		 => 'simplelink',
 								'target' => $this->remove_http($this->get_val($action, 'link_open_in', ''), $http),
 								'url' 	 => $image_link,
-								'd'		 => $this->get_val($action, 'action_delay', '')
+								'd'		 => $this->get_val($action, 'action_delay', ''),
+								'rd'	 => $this->get_val($action, 'action_repeats', '')
 							);
 						}
 					break;
@@ -3083,7 +3106,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'jumptoslide',
 							'slide'	=> 'rs-'.$this->get_val($action, 'jump_to_slide', ''),
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'next':
@@ -3091,35 +3115,40 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'jumptoslide',
 							'slide'	=> 'next',
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'gofullscreen':
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'gofullscreen',								
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'toggle_global_mute_video':
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'toggle_global_mute_video',								
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'exitfullscreen':
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'exitfullscreen',								
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'togglefullscreen':
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'togglefullscreen',								
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'prev':
@@ -3127,28 +3156,32 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'jumptoslide',
 							'slide'	=> 'previous',
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'pause':
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'pauseslider',
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'resume':
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'playslider',
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'toggle_slider':
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'toggleslider',
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'open_modal':
@@ -3158,7 +3191,8 @@ rs-module .material-icons {
 							'a'	=> 'openmodal',
 							'modal' => $_modal,
 							'ms' => $this->get_val($action, 'modalslide', ''),
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 						if(!empty($_modal)){
 							if(!isset($this->modal_sliders[$_modal])){
@@ -3184,7 +3218,8 @@ rs-module .material-icons {
 						$events[] = array(
 							'o'	=> $this->get_val($action, 'tooltip_event', ''),
 							'a'	=> 'closemodal',
-							'd'	=> $this->get_val($action, 'action_delay', '')
+							'd'	=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'callback':
@@ -3192,7 +3227,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'callback',
 							'call'	=> $this->replace_html_ids($this->get_val($action, 'actioncallback', '')),
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'scroll_under': //ok
@@ -3202,7 +3238,8 @@ rs-module .material-icons {
 							'offset' => $this->get_val($action, 'scrollunder_offset', ''),
 							'd'		 => $this->get_val($action, 'action_delay', ''),
 							'sp'	 => $this->get_val($action, 'action_speed', '300'),
-							'e'	 	 => $this->get_val($action, 'action_easing', 'none')
+							'e'	 	 => $this->get_val($action, 'action_easing', 'none'),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 						$easing = $this->get_val($action, 'action_easing', 'none');
 						$this->easings[$easing] = $easing;
@@ -3215,7 +3252,8 @@ rs-module .material-icons {
 							'offset' => $this->get_val($action, 'scrollunder_offset', ''),
 							'd'		 => $this->get_val($action, 'action_delay', ''),
 							'sp'	 => $this->get_val($action, 'action_speed', '300'),
-							'e'	 	 => $this->get_val($action, 'action_easing', 'none')
+							'e'	 	 => $this->get_val($action, 'action_easing', 'none'),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 						$easing = $this->get_val($action, 'action_easing', 'none');
 						$this->easings[$easing] = $easing;
@@ -3226,7 +3264,8 @@ rs-module .material-icons {
 							'a'		=> 'startlayer',
 							'layer'	=> $layer_attribute_id,
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'ch'	=> $this->get_val($action, 'updateChildren', '')
+							'ch'	=> $this->get_val($action, 'updateChildren', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'next_frame':
@@ -3235,7 +3274,8 @@ rs-module .material-icons {
 							'a'		=> 'nextframe',
 							'layer'	=> $layer_attribute_id,
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'ch'	=> $this->get_val($action, 'updateChildren', '')
+							'ch'	=> $this->get_val($action, 'updateChildren', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'prev_frame':
@@ -3244,7 +3284,8 @@ rs-module .material-icons {
 							'a'		=> 'prevframe',
 							'layer'	=> $layer_attribute_id,
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'ch'	=> $this->get_val($action, 'updateChildren', '')
+							'ch'	=> $this->get_val($action, 'updateChildren', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'start_frame':
@@ -3254,7 +3295,8 @@ rs-module .material-icons {
 							'layer'	=> $layer_attribute_id,
 							'f'		=> $this->get_val($action, 'gotoframe', ''),
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'ch'	=> $this->get_val($action, 'updateChildren', '')
+							'ch'	=> $this->get_val($action, 'updateChildren', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'start_out':
@@ -3263,7 +3305,8 @@ rs-module .material-icons {
 							'a'		=> 'stoplayer',
 							'layer'	=> $layer_attribute_id,
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'ch'	=> $this->get_val($action, 'updateChildren', '')
+							'ch'	=> $this->get_val($action, 'updateChildren', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'toggle_layer':
@@ -3273,7 +3316,8 @@ rs-module .material-icons {
 							'ls'	=> $this->get_val($action, 'toggle_layer_type', ''),
 							'layer'	=> $layer_attribute_id,
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'ch'	=> $this->get_val($action, 'updateChildren', '')
+							'ch'	=> $this->get_val($action, 'updateChildren', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'toggle_frames':
@@ -3285,7 +3329,8 @@ rs-module .material-icons {
 							'n'	=> $this->get_val($action, 'gotoframeN', ''),
 							'layer'	=> $layer_attribute_id,
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'ch'	=> $this->get_val($action, 'updateChildren', '')
+							'ch'	=> $this->get_val($action, 'updateChildren', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'start_video':
@@ -3293,7 +3338,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'playvideo',
 							'layer'	=> $layer_attribute_id,
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'stop_video':
@@ -3301,7 +3347,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'stopvideo',
 							'layer'	=> $layer_attribute_id,
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'mute_video':
@@ -3309,7 +3356,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'mutevideo',
 							'layer'	=> $layer_attribute_id,
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'unmute_video':
@@ -3317,7 +3365,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'unmutevideo',
 							'layer'	=> $layer_attribute_id,
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'toggle_video':
@@ -3325,7 +3374,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'togglevideo',
 							'layer'	=> $layer_attribute_id,
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'toggle_mute_video':
@@ -3333,7 +3383,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'toggle_mute_video',
 							'layer'	=> $layer_attribute_id,
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'simulate_click':
@@ -3341,7 +3392,8 @@ rs-module .material-icons {
 							'o'		=> $this->get_val($action, 'tooltip_event', ''),
 							'a'		=> 'simulateclick',
 							'layer'	=> $layer_attribute_id,
-							'd'		=> $this->get_val($action, 'action_delay', '')
+							'd'		=> $this->get_val($action, 'action_delay', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 					case 'toggle_class':
@@ -3350,7 +3402,8 @@ rs-module .material-icons {
 							'a'		=> 'toggleclass',
 							'layer'	=> $layer_attribute_id,
 							'd'		=> $this->get_val($action, 'action_delay', ''),
-							'class'	=> $this->get_val($action, 'toggle_class', '')
+							'class'	=> $this->get_val($action, 'toggle_class', ''),
+							'rd'	 => $this->get_val($action, 'action_repeats', '')
 						);
 					break;
 				}
@@ -3664,6 +3717,11 @@ rs-module .material-icons {
 			'grayscale'	 => array('n' => 'gra', 'd' => array('frame_0' => 0, 'frame_1' => 0, 'default' => 'inherit'), 'depth' => array('filter', 'grayscale')), //0
 			'brightness' => array('n' => 'bri', 'd' => array('frame_0' => 100, 'frame_1' => 100, 'default' => 'inherit'), 'depth' => array('filter', 'brightness')), //100
 			'blur'		 => array('n' => 'blu', 'd' => array('frame_0' => 0, 'frame_1' => 0, 'default' => 'inherit'), 'depth' => array('filter', 'blur')), //100
+			'bGrayscale' => array('n' => 'bG', 'd' => array('frame_0' => 0, 'frame_1' => 0, 'default' => 'inherit'), 'depth' => array('bfilter', 'grayscale')), //0
+			'bBrightness' => array('n' => 'bR', 'd' => array('frame_0' => 100, 'frame_1' => 100, 'default' => 'inherit'), 'depth' => array('bfilter', 'brightness')), //100
+			'bBlur'		 => array('n' => 'bB', 'd' => array('frame_0' => 0, 'frame_1' => 0, 'default' => 'inherit'), 'depth' => array('bfilter', 'blur')), //0
+			'bInvert' => array('n' => 'bI', 'd' => array('frame_0' => 0, 'frame_1' => 0, 'default' => 'inherit'), 'depth' => array('bfilter', 'invert')), //0
+			'bSepia'	=> array('n' => 'bS', 'd' => array('frame_0' => 0, 'frame_1' => 0, 'default' => 'inherit'), 'depth' => array('bfilter', 'sepia')), //0
 			'color'		 => array('n' => 'c', 'd' => 'inherit', 'depth' => array('color', 'color')), //'#ffffff'
 			'backgroundColor' => array('n' => 'bgc', 'd' => 'inherit', 'depth' => array('bgcolor', 'backgroundColor')), //'transparent'
 		
@@ -3789,6 +3847,15 @@ rs-module .material-icons {
 					$use['brightness']	= $_base['brightness'];
 					$use['blur']		= $_base['blur'];
 				}
+
+				if($this->get_val($frame, array('bfilter', 'use')) === true){
+					$use['bGrayscale']	= $_base['bGrayscale'];
+					$use['bBrightness']	= $_base['bBrightness'];
+					$use['bBlur']		= $_base['bBlur'];
+					$use['bInvert']	= $_base['bInvert'];
+					$use['bSepia']		= $_base['bSepia'];
+				}
+
 				if($this->get_val($frame, array('color', 'use')) === true){
 					$use['color'] = $_base['color'];
 				}
@@ -4017,6 +4084,7 @@ rs-module .material-icons {
 				'z' 			=> array('n' => 'z', 'd' => 0),
 				'color'			=> array('n' => 'c', 'd' => '#fff'),
 				'backgroundColor' => array('n' => 'bgc', 'd' => 'transparent'),
+				'gradientStyle' => array('n' => 'gs', 'd' => 'fading'),
 				'borderColor'	=> array('n' => 'boc', 'd' => 'transparent'),
 				'borderRadius'	=> array('n' => 'bor', 'd' => '0,0,0,0', 'depth' => array('borderRadius', 'v')), //check further as it is stored in v
 				'borderStyle'	=> array('n' => 'bos', 'd' => 'none'),
@@ -4253,7 +4321,8 @@ rs-module .material-icons {
 	 * transform certain values into a different format for output
 	 **/
 	public function transform_frame_vals($nv){
-		
+				
+
 		if(strpos($nv, '{') !== false){
 			$nv = str_replace(array('{', '}'), '', $nv);
 			$nv = str_replace(',', '|', $nv);
@@ -4264,6 +4333,7 @@ rs-module .material-icons {
 			$nv = str_replace(',', '|', $nv);
 			$nv = 'cyc('.$nv.')';
 		}
+		
 		
 		return $nv;
 	}
@@ -4497,6 +4567,7 @@ rs-module .material-icons {
 		
 		if(!in_array($video_type, array('streamyoutube', 'streamyoutubeboth', 'youtube', 'streamvimeo', 'streamvimeoboth', 'vimeo', 'streaminstagram', 'streaminstagramboth', 'html5'), true)) return '';
 		
+		$data['video']['vfc'] = $this->get_val($layer, array('media', 'fitCover'), true);		
 		$http	 = (is_ssl()) ? 'https://' : 'http://';
 		$vid	 = trim($this->get_val($layer, array('media', 'id')));
 		$mute	 = $this->get_val($layer, array('media', 'mute'), true);
@@ -4531,7 +4602,16 @@ rs-module .material-icons {
 		}
 
 		$dotted	= $this->get_val($layer, array('media', 'dotted'));
-		if(!in_array($dotted, array('none', ''), true)) $data['video']['do'] = $dotted;
+		if(!in_array($dotted, array('none', ''), true)){
+			$data['video']['do'] = $dotted;
+			$doca	= $this->get_val($layer, array('media', 'dottedColorA'), 'transparent');
+			$docb	= $this->get_val($layer, array('media', 'dottedColorB'), '#000000');
+			$dos	= $this->get_val($layer, array('media', 'dottedSize'), 1);
+			
+			if($doca !== 'transparent') $data['video']['doca'] = $doca;
+			if(!in_array($docb, array('', '#000000', '#000'), true)) $data['video']['docb'] = $docb;
+			if(!in_array($dos, array('', '1', 1), true)) $data['video']['dos'] = $dos;
+		}
 		
 		$data['video']['l'] = $vl;
 		$data['video']['ptimer'] = $vpt;
@@ -4856,7 +4936,7 @@ rs-module .material-icons {
 		$slide = $this->get_slide();
 		
 		if($this->slider->get_param('sourcetype') !== 'gallery'){
-			if($this->slider->get_param('sourcetype') === 'post'){
+			if(in_array($this->slider->get_param('sourcetype'), array('post', 'woo', 'woocommerce'), true)){
 				$bgi['id'] = get_post_thumbnail_id($slide->get_id());
 				if(!empty($bgi['id'])){
 					$bgi['size']	= $this->get_val($layer, array('behavior', 'streamSourceType'), 'full');
@@ -5484,9 +5564,19 @@ rs-module .material-icons {
 		//$data['video']['autoplay'] = 'true'; //default, so dont write
 		//$data['video']['apf'] = false; //default, so dont write
 		
-		if($slide->get_param(array('bg', 'video', 'forceCover'), true) == false){ $data['video']['fc'] = false; }
+		
+		$data['video']['vfc'] = $slide->get_param(array('bg', 'video', 'fitCover'), true); //video fit cover
 		$do	= $slide->get_param(array('bg', 'video', 'dottedOverlay'), 'none');
-		if($do !== 'none') $data['video']['do'] = $do;
+		if($do !== 'none'){
+			$data['video']['do'] = $do;
+			$doca	= $slide->get_param(array('bg', 'video', 'dottedColorA'), 'transparent');
+			$docb	= $slide->get_param(array('bg', 'video', 'dottedColorB'), '#000000');
+			$dos	= $slide->get_param(array('bg', 'video', 'dottedOverlaySize'), 1);
+			
+			if($doca !== 'transparent') $data['video']['doca'] = $doca;
+			if(!in_array($docb, array('', '#000000', '#000'), true)) $data['video']['docb'] = $docb;
+			if(!in_array($dos, array('', '1', 1), true)) $data['video']['dos'] = $dos;
+		}
 
 		//echo $this->ld().RS_T7."<!-- BACKGROUND VIDEO LAYER -->\n";
 		echo $this->ld().RS_T7.'<rs-bgvideo '."\n";
@@ -5696,41 +5786,243 @@ rs-module .material-icons {
 		$slide = $this->get_slide();
 		return ($this->_truefalse($slide->get_param(array('visibility', 'hideFromNavigation'), false)) === true) ? ' data-invisible="true"' : '';
 	}
-	
+
+	/**
+	 * get slide animation IN/OUT attribute
+	 **/
+	public function get_html_slide_anim_attribute($data, $inout, $attribute, $default, $short, $force){
+		if(!empty($data)){
+			$result = ($inout !== false) ? $this->get_val($data, array($inout, $attribute), $default) : $this->get_val($data, array($attribute), $default);
+		}else{
+			$slide = $this->get_slide();
+			$result = ($inout !== false) ? $slide->get_param(array('slideChange', $inout, $attribute), $default) : $slide->get_param(array('slideChange', $attribute), $default);
+		}
+		
+		$_result = ($result === false) ? 'false' : $result; 
+		$_result = ($_result === true) ? 'true' : $_result; 
+		$_result = $this->shorten($_result, 'default', 'd');
+		$_result = $this->transform_frame_vals($_result);
+		
+		if($force === true){
+			if($attribute === 'e' || $short === 'e') $this->easings[$result] = $result;
+			return ($result !== '') ? $short.':'. $result.';' : '';
+		}else{
+			if($attribute === 'e' || $short === 'e') $this->easings[$_result] = $_result;
+			return ($result !== '' && $result !== $default) ? $short.':'. $_result.';' : '';
+		}
+	}
+
+	/**
+	 * get slide animation attribute
+	 **/
+	public function get_slide_some_attribute($attr){
+		$slide = $this->get_slide();
+		$result = $slide->get_param(array('timeline', $attr), 1);
+		if(is_array($result) || is_object($result)) $result = implode(',', (array)$result);
+		$result = $this->shorten($result, 'default', 'd');
+		return ($result !== '' && $result != 1) ? $result : '';
+		
+	}
+		
 	/**
 	 * get slide rotation as html
 	 **/
 	public function get_html_anim(){
+		$slide = $this->get_slide();	
+		$transition = $this->get_html_first_transition();
+		$transition = (empty($transition) && $slide->get_param(array('slideChange'), false) === false) ? 'fade' : $transition;
+		$base_transitions = $this->get_base_transitions();
+		
+		$data = array();
+		
+		$preset = $slide->get_param(array('slideChange', 'preset'), false);
+		$rnd_transition = '';
+		if(is_string($transition) && in_array($transition, array('random', 'random-static', 'random-premium'), true)){
+			$duration = $this->get_html_slide_anim_duration(); //get duration and set it to 1000 if smaller than 500
+			if(intval($duration) < 300) $duration = 750;
+			$preset = 'rndany';
+			$transition = '';
+		}
+		if($preset !== false && strpos($preset, 'rnd') === 0){
+			$rnd_main = $this->get_val($base_transitions, array('random', $preset, 'rndmain'), '');
+			$rnd_grp = $this->get_val($base_transitions, array('random', $preset, 'rndgrp'), '');
+			$rnd_transition = $this->get_random_slide_transition($rnd_main, $rnd_grp, $base_transitions);
+			//get values for the random transition and store it in $data
+			if(!empty($rnd_transition)){
+				$data = $this->get_slide_transition_values($rnd_transition, $base_transitions);
+				$this->frontend_action = true;
+			}
+		}
+		
 		$anim = ' data-anim="';
-		$anim .= $this->get_html_ease_in();
-		$anim .= $this->get_html_ease_out();
-		$anim .= $this->get_html_duration();
-		$anim .= $this->get_html_rotation();
-		$anim .= $this->get_html_transitions();
-		$anim .= $this->get_html_slot_amount();
-		/* active_transiton_settings_CANVAS
-		
-		 $anim .= $this->get_html_slide_rows_amount();
-		$anim .= $this->get_html_slide_cols_amount();
-		$anim .= $this->get_html_slide_from();
-		$anim .= $this->get_html_slide_axis();
-		$anim .= $this->get_html_slide_effect();
-		$anim .= $this->get_html_slide_direction();*/
+		$slots = false;
+		if(!empty($transition)){ /* FALLBACK TO OLD OUTPUT */
+			foreach($base_transitions as $_type => $_transition){
+				if(empty($_transition) || !is_array($_transition)) continue;
+				foreach($_transition as $_values){
+					if(empty($_values) || !is_array($_values)) continue;
+					foreach($_values as $_name => $_v){
+						if($_name !== $transition) continue;
+						$data = $_v;
+						if($_type === 'basic') $slots = '1'; //set slots to 1 as a fallback
+						break;
+					}
+				}
+			}
+			
+			if(!is_array($data)) $data = array();
+			
+			$duration = (!isset($duration)) ? $this->get_html_slide_anim_duration() : $duration;
+			if(in_array($transition, array('3dcurtain-vertical', '3dcurtain-horizontal'), true)){
+				$duration = (empty($duration) || $duration == '') ? 500 : intval(intval($duration) / 3);
+			}elseif($duration == '' && strpos($transition, 'slidingoverlay') !== false){				
+				$duration = 2000;
+			}
+			$anim .= ($duration === '') ? '' : 'ms:'.$duration.';';
+			$anim .= $this->get_html_slide_anim_rotation();
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'd', 15, 'd', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'e', 'basic', 'e', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'p', 'none', 'p', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'f', 'start', 'f', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'o', 'inout', 'o', false);
+			
+			//move slots if exists to the $data
+			$slots = ($slots === false) ? $this->get_slide_some_attribute('slots') : $slots;
+			
+			if(!empty($slots) && !in_array($slots, array('default', 'd'), true)){ //
+				if(!isset($data['in'])) $data['in'] = array();
+				if(!isset($data['in']['row'])) $data['in']['row'] = $slots;
+				if(!isset($data['in']['col'])) $data['in']['col'] = $slots;
+			}
+
+			$easin = $this->get_slide_some_attribute('easeIn');
+			$easout = $this->get_slide_some_attribute('easeOut');
+
+			if(!empty($easin) && !in_array($easin, array('default', 'd'), true)){ //
+				if(!isset($data['in'])) $data['in'] = array();
+				if(!isset($data['in']['e'])) $data['in']['e'] = $easin;
+				$this->easings[$easin] = $easin;
+			}
+
+			if(!empty($easout) && !in_array($easout, array('default', 'd'), true)){ //
+				if(!isset($data['out'])) $data['out'] = array();
+				if(!isset($data['out']['e'])) $data['out']['e'] = $easout;
+				$this->easings[$easout] = $easout;
+			}
+
+		}else{ /*CANVAS*/
+			/* Animate Defaults */
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'd', 15, 'd', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'e', 'basic', 'e', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'speed', 1000, 'ms', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'p', 'none', 'p', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'f', 'start', 'f', false);
+			$anim .= $this->get_html_slide_anim_attribute($data, false, 'o', 'inout', 'o', false);
+			
+		}
 		$anim .= '"';
+
+
+		/* Animates 3D */
+		$anim_ddd = ' data-d3="';
+		$dddf = $this->get_html_slide_anim_attribute($data, 'd3', 'f', 'none', 'f', false);
+		if($dddf !== 'f:none'){
+			$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'f', 'none', 'f', false);
+			$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'd', 'horizontal', 'd', false);
+			$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'z', '300', 'z', false);
+			if($dddf === 'fly'){
+				$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'fz', '0', 'fz', false);
+				$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'fdi', '1.5', 'fdi', false);
+				$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'fdo', '2', 'fdo', false);
+			}
+			if($dddf !== 'turn'){
+				$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 't', '0', 't', false);
+			}			
+			$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'c', '#ccc', 'c', false);
+			$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'e', 'power2.inOut', 'e', false);
+			$shad = $this->get_html_slide_anim_attribute($data, 'd3', 'su', 'false', 'su', false);
+			if($shad === 'su:true;'){
+				$anim_ddd .= 'su:true;';
+				$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'sc', '#000', 'sc', false);
+				$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'smi', '0', 'smi', false);
+				$anim_ddd .= $this->get_html_slide_anim_attribute($data, 'd3', 'sma', '0.5', 'sma', false);
+			}
+		}
+		$anim_ddd .= '"'; 
 		
-		return ($anim !== ' data-anim=""') ? $anim : '';
+		/* Animates In */
+		$anim_in = ' data-in="';
+		if(!empty($rnd_transition)) $anim_in .= 'prst:'.$preset.';';
+		$motion = (empty($data)) ? $slide->get_param(array('slideChange', 'in', 'mou'), false) : $this->get_val($data, array('in', 'mou'), false);
+		if($motion === true) $anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'mo', '80', 'mo', true);
+		if($motion === true) $anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'moo', 'none', 'moo', true);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'o', '1', 'o', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'x', '0', 'x', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'y', '0', 'y', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'r', '0', 'r', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'sx', '1', 'sx', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'sy', '1', 'sy', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'm', false, 'm', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'e', 'power2.inOut', 'e', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'row', '1', 'row', false);
+		$anim_in .= $this->get_html_slide_anim_attribute($data, 'in', 'col', '1', 'col', false);
+		$anim_in .= '"'; 
+
+		/* Basic Filters */
+		$anim_filters = ' data-filter="';
+		$slide_filters = (empty($data)) ? $slide->get_param(array('slideChange', 'filter', 'u'), false) : $this->get_val($data, array('filter', 'u'), false);		
+		if($slide_filters === true){		
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 'e', 'default', 'e', false);
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 'm', '0', 'm', false);
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 'b', '0', 'b', false);
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 'g', '0', 'g', false);
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 'h', '100', 'h', false);
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 's', '0', 's', false);
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 'c', '100', 'c', false);
+			$anim_filters .= $this->get_html_slide_anim_attribute($data, 'filter', 'i', '0', 'i', false);
+		}
+		$anim_filters .= '"'; 
+		
+		$slide_out = (empty($data)) ? $slide->get_param(array('slideChange', 'out', 'a'), true) : $this->get_val($data, array('out', 'a'), true);
+		
+		/* Animates Out */
+		$anim_out = ' data-out="';
+		if($slide_out === false){
+			$_anim_out = $this->get_html_slide_anim_attribute($data, 'out', 'o', '1', 'o', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'x', '0', 'x', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'y', '0', 'y', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'r', '0', 'r', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'sx', '1', 'sx', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'sy', '1', 'sy', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'm', false, 'm', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'e', 'power2.inOut', 'e', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'row', '1', 'row', false);
+			$_anim_out .= $this->get_html_slide_anim_attribute($data, 'out', 'col', '1', 'col', false);
+			
+			$anim_out .= ($_anim_out === '') ? 'a:false;' : $_anim_out;
+		}
+		
+		$anim_out .= '"';
+		
+		if($anim === ' data-anim=""') $anim = '';
+		if($anim_filters !== ' data-filter=""') $anim .= $anim_filters;
+		if($anim_in !== ' data-in=""') $anim .= $anim_in;
+		if($anim_out !== ' data-out=""') $anim .= $anim_out;
+		if($anim_ddd !== ' data-d3=""') $anim .= $anim_ddd;
+		
+		return $anim;
 	}
 	
 	/**
 	 * get slide duration as html
 	 **/
-	public function get_html_duration(){
+	public function get_html_slide_anim_duration(){
 		$slide		= $this->get_slide();
 		$duration	= $slide->get_param(array('timeline', 'duration'), ''); //$this->slider->get_param(array('def', 'transitionDuration'), '')
 		$duration	= ((is_array($duration) || is_object($duration)) && !empty($duration)) ? implode(',', (array)$duration) : $duration;
-		$duration	= str_replace('default', 'd', $duration);
+		if(in_array($duration, array('default', 'd'), true)) $duration = '';
 		
-		return (!empty($duration)) ? 's:'.$duration.';' : '';
+		return (!empty($duration)) ? $duration : '';
 	}
 	
 	
@@ -5738,7 +6030,7 @@ rs-module .material-icons {
 	/**
 	 * get slide rotation as html
 	 **/
-	public function get_html_rotation(){
+	public function get_html_slide_anim_rotation(){
 		$slide		= $this->get_slide();
 		$rotation	= (array)$slide->get_param(array('timeline', 'rotation'), '');
 		$html_rotation = '';
@@ -5746,7 +6038,7 @@ rs-module .material-icons {
 		if(!empty($rotation)){
 			$rot_string = '';
 			foreach($rotation as $rkey => $rot){
-				if (intval($rot) !== 0) {				
+				if(intval($rot) !== 0){			
 					$rot = intval($rot);			
 					if($rot != 0){
 						if($rot > 720 && $rot != 999)
@@ -5755,6 +6047,11 @@ rs-module .material-icons {
 							$rot = -720;
 					} 
 				}
+				if(in_array($rot, array('random', 'ran', 'rand'), true)) $rot = 'ran(-20|20)';
+				$rot = $this->shorten($rot, 'default', 'd');
+				$rot = $this->transform_frame_vals($rot);
+				if(in_array($rot, array('default', 'd'), true)) continue;
+				
 				if($rkey > 0) $rot_string .= ',';
 				$rot_string .= $rot;
 			}
@@ -5769,7 +6066,7 @@ rs-module .material-icons {
 	/**
 	 * get slide ease in as html
 	 **/
-	public function get_html_ease_in(){
+	public function get_html_slide_anim_ease_in(){
 		$slide	= $this->get_slide();
 		$easein	= $slide->get_param(array('timeline', 'easeIn'), array('default'));
 		if((is_array($easein) || is_object($easein)) && !empty($easein)){
@@ -5788,7 +6085,7 @@ rs-module .material-icons {
 	/**
 	 * get slide ease out as html
 	 **/
-	public function get_html_ease_out(){
+	public function get_html_slide_anim_ease_out(){
 		$slide	 = $this->get_slide();
 		$easeout = $slide->get_param(array('timeline', 'easeOut'), array('default'));
 		if((is_array($easeout) || is_object($easeout)) && !empty($easeout)){
@@ -5807,13 +6104,17 @@ rs-module .material-icons {
 	/**
 	 * prepare the transition data attribute
 	 **/
-	public function get_html_transitions(){
+	public function get_html_first_transition(){
 		$slide		= $this->get_slide();
-		$transition	= $slide->get_param(array('timeline', 'transition'), 'fade');
-		$transition = ((is_array($transition) || is_object($transition)) && !empty($transition)) ? implode(',', (array)$transition) : $transition;
+		$transition	= $slide->get_param(array('timeline', 'transition'), '');
+		//$transition = ((is_array($transition) || is_object($transition)) && !empty($transition)) ? implode(',', (array)$transition) : $transition;
+		if((is_array($transition) || is_object($transition)) && !empty($transition)){
+			$transition = (array)$transition;
+			$transition = array_shift($transition);
+		}
 		$transition = (empty($transition)) ? '' : $transition;
 		
-		return (trim($transition) !== '') ? 't:'.$transition.';' : '';
+		return (trim($transition) !== '') ? $transition : '';
 	}
 	
 	/**
@@ -5830,6 +6131,26 @@ rs-module .material-icons {
 		}
 		
 		return $random;
+	}
+	
+	/**
+	 * prepare the alternate transition data attribute
+	 **/
+	public function get_html_alt_transitions(){
+		$slide = $this->get_slide();
+		
+		$alt_trans	= ' data-alttrans="';
+		$alt		= (array)$slide->get_param(array('slideChange', 'alt'), array());
+		if(empty($alt)){ //check for fallback of the old output, remove first entry
+			$alt = (array)$slide->get_param(array('timeline', 'transition'), array());
+			if(!empty($alt)) array_shift($alt);
+		}
+		$alt_trans .= implode(',', $alt);
+		$alt_trans .= '"';
+		
+		$this->frontend_action = ($alt_trans !== ' data-alttrans=""') ? true : $this->frontend_action;
+		
+		return ($alt_trans !== ' data-alttrans=""') ? $alt_trans : '';
 	}
 
 	/**
@@ -5852,28 +6173,61 @@ rs-module .material-icons {
 	}
 
 	/**
-	 * get slide first transition data as html
-	 **/
-	public function get_html_first_anim($index){
-		return ($index == $this->slider->get_start_with_slide_setting() && $this->slider->get_param('type') !== 'hero') ? $this->get_first_anim_data() : '';
-	}
-	
-	/**
 	 * the first transition can be changed through Slider settings, so check here
 	 **/
-	public function get_first_anim_data(){
+	public function js_get_first_anim_data(){
 		$html = '';
 		if($this->slider->get_param(array('general', 'firstSlide', 'set'), false) == true && $this->slider->get_param('type') !== 'hero'){
-			$html .= 't:'.$this->slider->get_param(array('general', 'firstSlide', 'type'), 'fade').';';
-
-			$duration = $this->slider->get_param(array('general', 'firstSlide', 'duration'), '300');
-			if(!empty($duration) && is_numeric($duration)) $html .= 's:'.$duration.';';
-
-			$amount = $this->slider->get_param(array('general', 'firstSlide', 'slotAmount'), '7');
-			if(!empty($amount) && is_numeric($amount)) $html .= 'sl:'.$amount.';';
+			$base_transitions = $this->get_base_transitions();
+			$transition = $this->slider->get_param(array('general', 'firstSlide', 'type'), 'fade');
+			$data = array();
+			foreach($base_transitions as $_transition){
+				if(empty($_transition) || !is_array($_transition)) continue;
+				foreach($_transition as $_values){
+					if(empty($_values) || !is_array($_values)) continue;
+					foreach($_values as $_name => $_v){
+						if($_name !== $transition) continue;
+						$data = $_v;
+						break;
+					}
+				}
+			}
+			
+			$duration = str_replace('ms', '', $this->slider->get_param(array('general', 'firstSlide', 'duration'), '300'));
+			if(!empty($duration) && is_numeric($duration)) $data['speed'] = $duration;
+			if(isset($data['title'])) unset($data['title']);
+			
+			/*$amount = $this->slider->get_param(array('general', 'firstSlide', 'slotAmount'), '7');
+			if(!empty($amount) && is_numeric($amount)) $anim .= 'sl:'.$amount.';';
+			$anim .= '"';
+			*/
+			
+			/*
+			* @desc needed for the Revealer AddOn, as the first transition should always be auto-disabled
+			* @since 6.4.0
+			* @JM
+			*/
+			$data = apply_filters('revslider_disable_first_trans', $data, $this->slider);
+			
+			if(!empty($data)){
+				$ff = true;
+				$html .= RS_T8.'fanim: {'."\n";
+				foreach($data as $k => $v){
+					$html .= ($ff === true) ? '' : ','."\n";
+					$html .= RS_T9.$k.':';
+					if(!empty($v)){
+						if(is_array($v)){
+							$html .= json_encode($v);
+						}else{
+							$html .= $this->write_js_var($v);
+						}
+					}
+					$ff = false;
+				}
+				$html .= "\n".RS_T8.'},'."\n";
+			}
 		}
-		
-		return ($html !== '') ? ' data-firstanim="'.$html.'"' : '';
+		return $html;
 	}
 	
 	/**
@@ -6013,97 +6367,7 @@ rs-module .material-icons {
 		
 		return ($ratio !== '') ? ' data-iratio="'.$ratio.'"' : '';
 	}
-	
-	/**
-	 * get slot amount
-	 **/
-	public function get_html_slot_amount(){
-		$slide = $this->get_slide();
-		
-		$slots = $slide->get_param(array('timeline', 'slots'), '7');
-		if(is_array($slots) || is_object($slots)) $slots = implode(',', (array)$slots);
-		$slots = $this->shorten($slots, 'default', 'd');
-		
-		return ($slots !== '') ? 'sl:'. $slots.';' : '';
-	}
-
-	/**
-	 * get rows amount
-	 **/
-	public function get_html_slide_rows_amount(){
-		$slide = $this->get_slide();
-		
-		$rows = $slide->get_param(array('timeline', 'rows'), '1');
-		if(is_array($rows) || is_object($rows)) $rows = implode(',', (array)$rows);
-		$rows = $this->shorten($rows, 'default', 'd');
-		
-		return ($rows !== '') ? 'ro:'. $rows.';' : '';
-	}
-
-	/**
-	 * get cols amount
-	 **/
-	public function get_html_slide_cols_amount(){
-		$slide = $this->get_slide();
-		
-		$cols = $slide->get_param(array('timeline', 'cols'), '1');
-		if(is_array($cols) || is_object($cols)) $cols = implode(',', (array)$cols);
-		$cols = $this->shorten($cols, 'default', 'd');
-		
-		return ($cols !== '') ? 'co:'. $cols.';' : '';
-	}
-
-	/**
-	 * get Slide Animation From Direction 
-	 **/
-	public function get_html_slide_from(){
-		$slide = $this->get_slide();
-		
-		$from = $slide->get_param(array('timeline', 'from'), 'start');
-		if(is_array($from) || is_object($from)) $from = implode(',', (array)$from);
-		$from = $this->shorten($from, 'default', 'd');
-		
-		return ($from !== '') ? 'fr:'. $from.';' : '';
-	}
-
-	/**
-	 * get Slide Animation From Direction 
-	 **/
-	public function get_html_slide_direction(){
-		$slide = $this->get_slide();
-		
-		$direction = $slide->get_param(array('timeline', 'direction'), 'horizontal');
-		if(is_array($direction) || is_object($direction)) $direction = implode(',', (array)$direction);
-		$direction = $this->shorten($direction, 'default', 'd');
-		
-		return ($direction !== '') ? 'di:'. $direction.';' : '';
-	}
-
-	/**
-	 * get Slide Animation From Direction 
-	 **/
-	public function get_html_slide_effect(){
-		$slide = $this->get_slide();
-		
-		$effect = $slide->get_param(array('timeline', 'effect'), 'fade');
-		if(is_array($effect) || is_object($effect)) $effect = implode(',', (array)$effect);
-		$effect = $this->shorten($effect, 'default', 'd');
-		
-		return ($effect !== '') ? 'ef:'. $effect.';' : '';
-	}
-
-	/**
-	 * get Slide Animation Axis 
-	 **/
-	public function get_html_slide_axis(){
-		$slide = $this->get_slide();
-		
-		$axis = $slide->get_param(array('timeline', 'axis'), 'null');
-		if(is_array($axis) || is_object($axis)) $axis = implode(',', (array)$axis);
-		$axis = $this->shorten($axis, 'default', 'd');
-		
-		return ($axis !== '') ? 'ax:'. $axis.';' : '';
-	}
+				
 	
 	/**
 	 * remove the navigation, as for example we are on a single slide
@@ -6715,11 +6979,13 @@ rs-module .material-icons {
 	private function add_js(){
 		$html_base_pre	 = $this->js_get_base_pre();
 		$html_root		 = $this->js_get_root();
+		$html_overlay    = $this->js_get_overlay();
 		$html_modal      = $this->js_get_modal();
 		$html_carousel	 = $this->js_get_carousel();
 		$html_progressbar = $this->js_get_progressbar();
 		$html_nav		 = $this->js_get_navigation();
 		$html_paralax	 = $this->js_get_parallax();
+		$html_first_anim = $this->js_get_first_anim_data();
 		$html_scroll	 = $this->js_get_scrolleffect();
 		$html_sb_timeline = $this->js_get_scrollbased_timeline();
 		$html_view_port	 = $this->js_get_viewport();
@@ -6750,11 +7016,13 @@ rs-module .material-icons {
 		echo $html_base_pre;
 		
 		echo $html_root;
+		echo $html_overlay;
 		echo $html_modal;
 		echo $html_carousel;
 		echo $html_progressbar;
 		echo $html_nav;
 		echo $html_paralax;
+		echo $html_first_anim;
 		echo $html_scroll;
 		echo $html_sb_timeline;
 		echo $html_view_port;
@@ -7003,12 +7271,12 @@ rs-module .material-icons {
 		$s	= $this->slider; //shorten
 		$fb	= array();
 		
-		$dpz = $s->get_param(array('general', 'disablePanZoomMobile'), false);
+		$dpz = $s->get_param(array('general', 'disablePanZoomMobile'), false);		
 		$sii = $s->get_param(array('troubleshooting', 'simplify_ie8_ios4'), true); //was false
 		$dfl = $s->get_param(array('general', 'disableFocusListener'), false);		
 		$urlhash = $s->get_param(array('general', 'enableurlhash'), false);		
 		$apvom = $s->get_param(array('general', 'autoPlayVideoOnMobile'), true);		
-		if($dpz !== false) $fb['panZoomDisableOnMobile'] = $dpz;
+		if($dpz !== false) $fb['panZoomDisableOnMobile'] = $dpz;		
 		if($sii !== false) $fb['simplifyAll'] = $sii;
 		if($s->get_param('type', 'standard') !== 'hero'){
 			$nsof = $s->get_param(array('general', 'nextSlideOnFocus'), false);
@@ -7374,9 +7642,35 @@ rs-module .material-icons {
 	}
 
 	/**
+	 * get the overlay attributes
+	 * @since: 6.4.0
+	 */
+	public function js_get_overlay(){
+		$html	= '';
+		$s		= $this->slider; //shorten
+		$do		= $s->get_param(array('layout', 'bg', 'dottedOverlay'), 'none');
+		
+		if($do !== 'none'){
+			$colora = str_replace(' ', '', $s->get_param(array('layout', 'bg', 'dottedColorA'), 'transparent'));
+			$colorb = str_replace(' ', '', $s->get_param(array('layout', 'bg', 'dottedColorB'), '#000000'));
+			$size	= $s->get_param(array('layout', 'bg', 'dottedOverlaySize'), 1);
+			
+			$html .= RS_T8.'overlay: {'."\n";
+			$html .= RS_T9.'type: '.$this->write_js_var($do).",\n";
+			$html .= ($colora !== 'transparent') ? RS_T9.'colora: '.$this->write_js_var($colora).",\n" : '';
+			$html .= (!in_array($colorb, array('', '#000000', '#000'), true)) ? RS_T9.'colorb: '.$this->write_js_var($colorb).",\n" : '';
+			$html .= (!in_array($size, array('', '1', 1), true)) ? RS_T9.'size: '.$this->write_js_var($size).",\n" : '';
+			$html .= "\n".RS_T8.'},'."\n";
+		}
+		
+		return $html;
+	}
+	
+	
+	/**
 	 * get the Modal Attributes
 	 */
-	public function js_get_modal() {
+	public function js_get_modal(){
 		$html	= '';
 		$s		= $this->slider; //shorten
 		
@@ -7545,10 +7839,10 @@ rs-module .material-icons {
 				'v' => $layout,
 				'd' => 'auto'
 			),
-			'dottedOverlay' => array(
+			/*'dottedOverlay' => array( //moved to multidimensional outside of this in 6.4.0
 				'v' => $s->get_param(array('layout', 'bg', 'dottedOverlay'), 'none'),
 				'd' => 'none'
-			),
+			),*/
 			'duration' => array(
 				'v' => $s->get_param(array('def', 'delay'), '9000'),
 				'd' => array(9000, '9000', '9000ms')
@@ -7631,6 +7925,10 @@ rs-module .material-icons {
 			),
 			'keepBPHeight' => array(
 				'v' => $s->get_param(array('size', 'keepBPHeight'), false),
+				'd' => false
+			),
+			'observeWrap' => array(
+				'v' => $s->get_param(array('general', 'observeWrap'), false),
 				'd' => false
 			)
 		);
@@ -8044,6 +8342,8 @@ rs-module .material-icons {
 							$va = $s->get_param(array('nav', $n, 'amount'), 5);
 							$span = $s->get_param(array('nav', $n, 'spanWrapper'), false);
 							$pos = $s->get_param(array('nav', $n, 'innerOuter'), 'inner');
+							$mhoff = $s->get_param(array('nav', $n, 'mhoffset'), 0);
+							$mvoff = $s->get_param(array('nav', $n, 'mvoffset'), 0);
 							
 							if(!in_array($width, array(100, '100', '100px'), true)) $h[$n]['width'] = $width;
 							if(!in_array($height, array(50, '50', '50px'), true)) $h[$n]['height'] = $height;
@@ -8053,6 +8353,8 @@ rs-module .material-icons {
 							if(strtolower($wc) !== '#transparent') $h[$n]['wrapper_color'] = $wc;
 							if(!in_array($va, array(5, '5'), true)) $h[$n]['visibleAmount'] = $va;
 							if($span === true) $h[$n]['span'] = $span;
+							if($mhoff!==0) $h[$n]['mhoff'] = $mhoff;
+							if($mvoff!==0) $h[$n]['mvoff'] = $mvoff;
 							if($pos !== 'inner') $h[$n]['position'] = $pos;
 							if($pos === 'inner'){
 								$arc = (in_array($s->get_param(array('nav', $n, 'align'), 'slider'), array('layergrid', 'grid'), true)) ? 'layergrid' : 'slider';

@@ -26,6 +26,16 @@ if( !function_exists('homey_add_hourly_reservation') ) {
         $owner = homey_usermeta($listing_owner_id);
         $owner_email = $owner['email'];
 
+        if ( empty($guests) || $guests === 0 ) {
+            echo json_encode(
+                array(
+                    'success' => false,
+                    'message' => $local['choose_guests']
+                )
+            );
+            wp_die();
+        }
+
         if ( !is_user_logged_in() || $userID === 0 ) {
             echo json_encode(
                 array(
@@ -45,7 +55,7 @@ if( !function_exists('homey_add_hourly_reservation') ) {
             );
             wp_die();
         }
-
+/*
         if(!homey_is_renter()) {
             echo json_encode(
                 array(
@@ -55,6 +65,7 @@ if( !function_exists('homey_add_hourly_reservation') ) {
              );
              wp_die();
         }
+*/
 
         //check security
         $nonce = $_REQUEST['security'];
@@ -151,6 +162,10 @@ if( !function_exists('homey_add_hourly_reservation') ) {
 
             $email_args = array('reservation_detail_url' => reservation_detail_link($reservation_id) );
             homey_email_composer( $owner_email, 'new_reservation', $email_args );
+
+            if(isset($current_user->user_email)){
+                homey_email_composer( $current_user->user_email, 'new_reservation', $email_args );
+            }
 
             do_action('homey_create_messages_thread', $guest_message, $reservation_id);
             wp_die();
@@ -2709,7 +2724,7 @@ if(!function_exists('homey_instance_hourly_booking')) {
             wp_die();
         }
 
-
+/*
          if(!homey_is_renter()) {
             echo json_encode(
                 array(
@@ -2719,7 +2734,17 @@ if(!function_exists('homey_instance_hourly_booking')) {
             );
             wp_die();
         }
+*/
 
+        if ( empty($guests) || $guests === 0 ) {
+            echo json_encode(
+                array(
+                    'success' => false,
+                    'message' => $local['choose_guests']
+                )
+            );
+            wp_die();
+        }
 
         $instance_page = add_query_arg( array(
             'check_in' => $check_in_date,

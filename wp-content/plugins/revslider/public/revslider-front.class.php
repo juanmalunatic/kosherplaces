@@ -7,6 +7,8 @@
 
 if(!defined('ABSPATH')) exit();
 
+global $revslider_rev_start_size_loaded;
+
 $revslider_rev_start_size_loaded = false;
 
 class RevSliderFront extends RevSliderFunctions {

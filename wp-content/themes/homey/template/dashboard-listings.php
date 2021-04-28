@@ -66,6 +66,16 @@ if( isset ( $_GET['keyword'] ) ) {
     $keyword = trim( $_GET['keyword'] );
     if ( ! empty( $keyword ) ) {
         $args['s'] = $keyword;
+
+        // to search with ID
+        if( is_numeric( $keyword ) ) {
+            $id = abs( intval( $keyword ) );
+            if( $id > 0 ) {
+                unset( $args[ 's' ] );
+                $args['post__in'] = array($keyword);
+            }
+        }
+        // end of to search with ID
     }
 }
 

@@ -1972,7 +1972,7 @@ if ( ! function_exists( 'homey_get_taxonomies_slug_array' ) ) {
     }
 }
 
-class homey_get_taxonomies_slug_array_walker extends Walker {
+class homey_get_taxonomies_slug_array_walker extends Walker_Nav_Menu {
     
     var $homey_array_buffer = array();
 
@@ -2843,7 +2843,7 @@ if(!function_exists('homey_get_membership_detail')) {
 }
 
 if(!function_exists('homey_get_user_subscription')) {
-    function homey_get_user_subscription($limit=true, $userID=null)
+    function homey_get_user_subscription($limit_record=-1, $userID=null, $subscription_status=null)
     {
         global $wpdb;
 
@@ -2851,50 +2851,56 @@ if(!function_exists('homey_get_user_subscription')) {
             $userID = get_current_user_id();
         }
 
-        $limit = ($limit == true) ? ' LIMIT 1 ':' ';
-        $sql = "SELECT ID FROM $wpdb->posts WHERE post_author = $userID AND post_type='hm_subscriptions' ORDER BY post_date DESC ".$limit;
+        $limit_record = $limit_record != -1 ? ' LIMIT '.$limit_record :  '';
+        $sql = "SELECT ID FROM $wpdb->posts WHERE post_author = $userID AND post_type='hm_subscriptions' ORDER BY post_date DESC ".$limit_record;
 
-        $subscriptionInfo = $wpdb->get_results($sql);
+        $subscriptions = $wpdb->get_results($sql);
+        $allInfo = array();
+        foreach ($subscriptions as $key => $subscription){
+            if($subscription_status != null){
+                $current_membershipStatus = get_post_meta($subscription->ID, 'hm_subscription_detail_status', true);
 
-        if(!empty(trim($limit))){
-            $info['subscriptionID'] = $subscriptionID = isset($subscriptionInfo[0]->ID)?$subscriptionInfo[0]->ID:-1;
-            $info['planID'] = explode('-', get_post_meta($subscriptionID, 'hm_subscription_detail_plan_id', true))[0];
-            return $info;
+                if(strtolower($subscription_status) != strtolower($current_membershipStatus)){
+                    continue;
+                }
+            }
+
+            $allInfo[$key]['subscriptionID'] = $subscriptionID = $subscription->ID;
+            $allInfo[$key]['planID'] = explode('-', get_post_meta($subscriptionID, 'hm_subscription_detail_plan_id', true))[0];
         }
 
-        return $subscriptionInfo;
+        return $allInfo;
     }
 }
 
 if(!function_exists('hm_validity_check')) {
     function hm_validity_check()
     {
-        global $wpdb;
         $memberships_url = homey_get_template_link('template/template-membership-webhook.php');
         if(!homey_is_admin() && in_array('homey-membership/homey-membership.php', apply_filters('active_plugins', get_option('active_plugins')))){
-            $subscriptionInfo = homey_get_user_subscription();
-            $unlimitedListings = get_post_meta($subscriptionInfo['planID'], 'hm_settings_unlimited_listings', true);
-            $subscriptionID = $subscriptionInfo['subscriptionID'];
-            $membershipStatus = get_post_meta($subscriptionID, 'hm_settings_status', true);
-            $remainingListings = get_post_meta($subscriptionID, 'hm_subscription_detail_remaining_listings', true);
+            $subscriptions = homey_get_user_subscription(1);
+            foreach($subscriptions as $subscription){
+                $subscriptionID = $subscription['subscriptionID'];
+                $membershipStatus = get_post_meta($subscriptionID, 'hm_settings_status', true);
 
-            if($unlimitedListings == '' && ($remainingListings < 1 || $membershipStatus == 'expired')){
-                $msgText = ($membershipStatus == 'expired')?'expired':'exceeded';
-                $varText = ($membershipStatus == 'expired')?'membership-expired':'limit-exceeded';
-                ?>
-                <script>
-                    document.getElementById("section-body").innerHTML = "<p class='error text-danger'>Your listing limit is <?php echo $msgText; ?> you will redirect to plan selection page.</p>";
-                    document.getElementById("section-body").style.padding = "10% 2%";
-                    document.addEventListener('contextmenu', function(e) {
-                        e.preventDefault();
-                    });
+                if($membershipStatus == 'expired'){
+                        $msgText = ($membershipStatus == 'expired')?'expired':'exceeded';
+                        $varText = ($membershipStatus == 'expired')?'membership-expired':'limit-exceeded';
+                        ?>
+                        <script>
+                            document.getElementById("section-body").innerHTML = "<p class='error text-danger'>Your listing limit is <?php echo $msgText; ?> you will redirect to plan selection page.</p>";
+                            document.getElementById("section-body").style.padding = "10% 2%";
+                            document.addEventListener('contextmenu', function(e) {
+                                e.preventDefault();
+                            });
 
-                    setInterval(function(){
-                        window.location.href = '<?php echo $memberships_url.'?'.$varText.'=1'; ?>';
-                    }, 5000);
-                </script>
-                <?php
-                exit;
+                            setInterval(function(){
+                                window.location.href = '<?php echo $memberships_url.'?'.$varText.'=1'; ?>';
+                            }, 5000);
+                        </script>
+                        <?php
+                        exit;
+                }
             }
         }
     }
@@ -2927,23 +2933,32 @@ if(!function_exists('hm_check_subscriptions_status')) {
 if(!function_exists('hm_listing_limit_check')) {
     function hm_listing_limit_check($userID)
     {
-        global $wpdb;
         $memberships_url = homey_get_template_link('template/template-membership-webhook.php');
         $upgrade_feature_listing_url = homey_get_template_link('template/template-membership-webhook.php');
         if(in_array('homey-membership/homey-membership.php', apply_filters('active_plugins', get_option('active_plugins')))){
             $allSubsListingsLimit = 0;
-            $subscriptions = homey_get_user_subscription(false, $userID);
+            $subscriptions = homey_get_user_subscription(1, $userID);
             foreach ($subscriptions as $k => $subscription){
-                $sub_status = get_post_meta($subscription->ID, "hm_subscription_detail_status", true);
-                if($sub_status == "active"){
-                    $allSubsListingsLimit += get_post_meta($subscription->ID, 'hm_subscription_detail_total_listings', true);
+
+                $sub_status = get_post_meta($subscription['subscriptionID'], "hm_subscription_detail_status", true);
+                $unlimitedListings = get_post_meta($subscription['planID'], 'hm_settings_unlimited_listings', true);
+                if($unlimitedListings == "on"){
+                    return array(
+                        'is_allowed_membership' => 1,
+                        'total_allowed_featured_listing' => 'unlimited',
+                        'current_number_listing' => 'unlimited',
+                        'remaining_number_listing' => 'unlimited'
+
+                    );
                 }
+
+                $allSubsListingsLimit += get_post_meta($subscription['planID'], 'hm_settings_listings_included', true);
             }
 
-            $currentListing = count_user_posts($userID,'listing');
+           $currentListing = homey_hm_user_listing_count($userID);
 
             if(!homey_is_admin() && $allSubsListingsLimit <= $currentListing){
-                $msgText = 'You consumed all listing limit.';
+                $msgText = $allSubsListingsLimit.' You consumed all listing limit, now ';
                 $varText = 'listing-limit-completed';
                 ?>
                 <script>
@@ -3170,6 +3185,53 @@ if(!function_exists("get_minimum_currency")){
         );
 
         return isset($currency_limit[$payment_currency])?$currency_limit[$payment_currency]:-1;
+    }
+}
+
+if(!function_exists("clearance_membership_plan")){
+    function clearance_membership_plan(){
+        $current_user = wp_get_current_user();
+        $user_id = $current_user->ID;
+        $user_email = $current_user->user_email;
+
+        $already_subscriptions = homey_get_user_subscription(10, null, 'active');
+        if(count($already_subscriptions) > 0){//already have package then expire them
+            //to expire subscriptions
+            foreach($already_subscriptions as $subscription){
+                $subscriptionID = $subscription['subscriptionID'];
+                update_post_meta($subscriptionID, 'hm_subscription_detail_status', 'draft');
+            }
+
+            //to expire listings because of change in package
+            $args = array(
+                'post_type'   => 'listing',
+                'author'      => $user_id,
+                'post_status' => 'any'
+            );
+
+            $query = new WP_Query( $args );
+            global $post;
+            while( $query->have_posts()){
+                $query->the_post();
+
+                $listing = array(
+                    'ID'          => $post->ID,
+                    'post_type'   => 'listing',
+                    'post_status' => 'expired'
+                );
+
+                wp_update_post( $listing );
+                update_post_meta( $post->ID, 'homey_featured', 0 );
+            }
+            wp_reset_postdata();
+
+            $donwgrade_message  = esc_html__('Account Downgraded,','homey') . "\r\n\r\n";
+            $donwgrade_message .= sprintf( esc_html__("Hello, You downgraded your subscription on  %s. Because you changed you subscription, we set the status of all your listings to \"expired\". You will need to choose which listings you want live and send them again for approval if nedeed. Thank you!",'homey'), get_option('blogname')) . "\r\n\r\n";
+
+            homey_send_emails($user_email,
+                sprintf(esc_html__('[%s] Account Downgraded','homey'), get_option('blogname')),
+                $donwgrade_message);
+        }
     }
 }
 

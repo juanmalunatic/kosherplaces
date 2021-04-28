@@ -13,10 +13,7 @@ $listing_id = homey_get_listing_id_by_ical_id($iCal_id);
 $iCalendar ="BEGIN:VCALENDAR\r\n";
 $iCalendar.="PRODID:-//Booking Calendar//EN\r\n";
 $iCalendar .= "VERSION:2.0";
-//$iCalendar .= homey_get_booked_dates_for_icalendar($listing_id);
-$iCalendar .= homey_get_reserved_dates_for_icalendar($listing_id);
-$iCalendar .= homey_get_reservation_pending_dates_for_icalendar($listing_id);
-$iCalendar .= homey_get_unavailable_dates_for_icalendar($listing_id);
+$iCalendar .= homey_get_booked_dates_for_icalendar($listing_id);
 $iCalendar.="
 END:VCALENDAR";
 

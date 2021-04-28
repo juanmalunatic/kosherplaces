@@ -253,9 +253,10 @@ if($hide_host_contact == 1) {
                         <div role="tabpanel" class="tab-pane fade in active" id="listings">
                             <div class="host-property-section">
                                 <?php
+                                $per_page_listings = 7;
                                 $author_args = array(
                                     'post_type' => 'listing',
-                                    'posts_per_page' => '7',
+                                    'posts_per_page' => "{$per_page_listings}",
                                     'author' => $author_id
                                 );
 
@@ -275,11 +276,11 @@ if($hide_host_contact == 1) {
                                         ?>
                                     </div>
 
-                                    <?php if($listing_founds > 7) { ?>
+                                    <?php if($listing_founds > $per_page_listings) { ?>
                                     <div class="homey-loadmore loadmore text-center">
                                         <a
                                         data-paged="2" 
-                                        data-limit="7" 
+                                        data-limit="<?php echo $per_page_listings; ?>"
                                         data-style="list"  
                                         data-author="yes" 
                                         data-authorid="<?php echo esc_attr($author_id); ?>"

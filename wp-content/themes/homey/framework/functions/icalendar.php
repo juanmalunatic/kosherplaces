@@ -1,8 +1,6 @@
 <?php
 if (!function_exists('homey_generate_ical_export_link')) {
-    function homey_generate_ical_export_link($listing_id)
-    {
-        delete_post_meta($listing_id, 'homey_ical_id');
+    function homey_generate_ical_export_link($listing_id){
         $homey_ical_id = get_post_meta($listing_id, 'homey_ical_id', true);
         if ($homey_ical_id == '') {
             $homey_ical_id = md5(uniqid(mt_rand(), true));
@@ -10,7 +8,6 @@ if (!function_exists('homey_generate_ical_export_link')) {
         }
 
         $ican_feeds_page_link = homey_get_template_link_2('template/template-ical.php');
-
         if (!empty($ican_feeds_page_link)) {
             $ican_feeds_page_link = esc_url_raw(add_query_arg('iCal', $homey_ical_id, $ican_feeds_page_link));
             return $ican_feeds_page_link;
@@ -22,7 +19,6 @@ if (!function_exists('homey_generate_ical_export_link')) {
 if (!function_exists('homey_get_listing_id_by_ical_id')) {
     function homey_get_listing_id_by_ical_id($ical_id)
     {
-
         $args = array(
             'post_type' => 'listing',
             'post_status' => 'publish',
@@ -50,8 +46,7 @@ if (!function_exists('homey_get_listing_id_by_ical_id')) {
 }
 
 if (!function_exists('homey_get_booked_dates_for_icalendar')) {
-    function homey_get_booked_dates_for_icalendar($listing_id)
-    {
+    function homey_get_booked_dates_for_icalendar($listing_id){
         $args = array(
             'post_type' => 'homey_reservation',
             'post_status' => 'any',
@@ -75,8 +70,7 @@ if (!function_exists('homey_get_booked_dates_for_icalendar')) {
 
         $wpQry = new WP_Query($args);
 
-        if ($wpQry->have_posts()) {
-            $return_feeds = '';
+        if ($wpQry->have_posts()) {  $return_feeds = '';
 
             while ($wpQry->have_posts()): $wpQry->the_post();
 
@@ -108,14 +102,19 @@ if (!function_exists('homey_generate_ical_event')) {
             $summary .= ' (' . $extra_summary_text . ')';
         }
 
-        $ical_event = "
-                BEGIN:VEVENT
-                SUMMARY:" . homey_string_escaped($summary) . "
-                DTSTART:" . homey_convert_date_to_cal($check_in_unix) . "
-                DTEND:" . homey_convert_date_to_cal($check_out_unix) . "
-                UID:" . md5(uniqid(mt_rand(), true)) . "@" . $_SERVER['HTTP_HOST'] . "
-                DTSTAMP:" . homey_convert_date_to_cal(time()) . "
-                END:VEVENT";
+        $ical_event = "BEGIN:VEVENT";
+        $ical_event .= "\n";
+        $ical_event .="SUMMARY:" . homey_string_escaped($summary);
+        $ical_event .= "\n";
+        $ical_event .="DTSTART:" . homey_convert_date_to_cal($check_in_unix);
+        $ical_event .= "\n";
+        $ical_event .="DTEND:" . homey_convert_date_to_cal($check_out_unix);
+        $ical_event .= "\n";
+        $ical_event .="UID:" . md5(uniqid(mt_rand(), true)) . "@" . $_SERVER['HTTP_HOST'];
+        $ical_event .= "\n";
+        $ical_event .="DTSTAMP:" . homey_convert_date_to_cal(time());
+        $ical_event .= "\n";
+        $ical_event .="END:VEVENT";
 
         return $ical_event;
 
@@ -381,7 +380,7 @@ if (!function_exists('homey_remove_ical_feeds')) {
         unset($homey_ical_feeds_meta[$remove_index]);
         update_post_meta($listing_id, 'homey_ical_feeds_meta', $homey_ical_feeds_meta);
 
-        //Remove reserved dates 
+        //Remove reserved dates
         $reservation_dates = get_post_meta($listing_id, 'reservation_dates', true);
         $array = array();
         foreach ($reservation_dates as $key => $value) {
@@ -404,67 +403,32 @@ if (!function_exists('homey_remove_ical_feeds')) {
     }
 }
 
-if (!function_exists('homey_get_reserved_dates_for_icalendar')) {
-    function homey_get_reserved_dates_for_icalendar($listing_id)
+if (!function_exists('homey_generate_ical_dot_ics_url')) {
+    function homey_generate_ical_dot_ics_url($listing_id)
     {
-        $reservation_dates = get_post_meta($listing_id, 'reservation_dates', true);
-        $return_feeds = '';
-        if (is_array($reservation_dates)) {
-            foreach($reservation_dates as $reserved_date => $reserved_date_desc){
-                $in_unix = $reserved_date;
-                $out_unix = $reserved_date;
+        $iCalendar ="BEGIN:VCALENDAR\r\n";
+        $iCalendar.="PRODID:-//Booking Calendar//EN\r\n";
+        $iCalendar .= "VERSION:2.0";
+        $iCalendar .= homey_get_booked_dates_for_icalendar($listing_id);
+        $iCalendar.="
+        END:VCALENDAR";
 
-                $return_feeds .= homey_generate_ical_event($in_unix, $out_unix, $listing_id, $reserved_date_desc);
-            }
+        $base_folder_path = WP_CONTENT_DIR . "/uploads/listings-calendars/";
+        $upload_folder   =  $base_folder_path."{$listing_id}/";
+
+        if (!file_exists($upload_folder)) {
+            mkdir($upload_folder, 0777, true);
         }
 
-        wp_reset_postdata();
+        $filename_to_be_saved = date("Y").'-'.date("m").'-'.date("d").".ics";
+        $upload_url      = content_url() . "/uploads/listings-calendars/{$listing_id}/{$filename_to_be_saved}";
 
-        return $return_feeds;
+        update_post_meta($listing_id, "icalendar_file_url_with_ics", $upload_url);
+
+        file_put_contents($upload_folder.$filename_to_be_saved, $iCalendar);
+        return $upload_url;
     }
 }
-
-if (!function_exists('homey_get_reservation_pending_dates_for_icalendar')) {
-    function homey_get_reservation_pending_dates_for_icalendar($listing_id)
-    {
-        $reservation_pending_dates = get_post_meta($listing_id, 'reservation_pending_dates', true);
-        $return_feeds = '';
-        if (is_array($reservation_pending_dates)) {
-            foreach($reservation_pending_dates as $reservation_pending_date => $reservation_pending_date_desc){
-                $in_unix = $reservation_pending_date;
-                $out_unix = $reservation_pending_date;
-
-                $return_feeds .= homey_generate_ical_event($in_unix, $out_unix, $listing_id, $reservation_pending_date_desc );
-            }
-        }
-
-        wp_reset_postdata();
-
-        return $return_feeds;
-    }
-}
-
-if (!function_exists('homey_get_unavailable_dates_for_icalendar')) {
-    function homey_get_unavailable_dates_for_icalendar($listing_id)
-    {
-        $unavailable_dates = get_post_meta($listing_id, 'reservation_unavailable', true);
-        $return_feeds = '';
-        if (is_array($unavailable_dates)) {
-            foreach($unavailable_dates as $unavailable_date){
-                $in_unix = $unavailable_date;
-                $out_unix = $unavailable_date;
-
-                $return_feeds .= homey_generate_ical_event($in_unix, $out_unix, $listing_id, 'un-availabile');
-            }
-        }
-
-        wp_reset_postdata();
-
-        return $return_feeds;
-    }
-}
-
-
 
 
 

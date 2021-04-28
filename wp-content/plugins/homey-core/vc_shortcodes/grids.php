@@ -94,28 +94,30 @@ if( !function_exists('homey_grids') ) {
 					if ($homey_grid_type == 'grid_v1') {
 						$col = 'col-lg-6 col-md-6 col-sm-6 col-xs-12';
 						$attachment = wp_get_attachment_image_src( $attach_id, 'homey_thumb_555_360' );
-						
-						$img_url = $attachment['0'];
-						$img_width = $attachment['1'];
-						$img_height = $attachment['2'];
+
 						if(empty($attachment)) {
 							$img_url = 'https://placehold.it/555x360';
 							$img_width = '555';
 							$img_height = '360';
-						}
+						}else{
+                            $img_url = $attachment['0'];
+                            $img_width = $attachment['1'];
+                            $img_height = $attachment['2'];
+                        }
 						
 					} elseif ($homey_grid_type == 'grid_v3') {
 						$col = 'col-sm-4 col-xs-6';
 						$attachment = wp_get_attachment_image_src( $attach_id, 'homey_thumb_360_360' );
 
-						$img_url = $attachment['0'];
-						$img_width = $attachment['1'];
-						$img_height = $attachment['2'];
 						if(empty($attachment)) {
 							$img_url = 'https://placehold.it/360x360';
 							$img_width = '360';
 							$img_height = '360';
-						}
+						}else{
+                            $img_url = $attachment['0'];
+                            $img_width = $attachment['1'];
+                            $img_height = $attachment['2'];
+                        }
 						
 					} elseif ($homey_grid_type == 'grid_v4') {
 						$col = 'col-sm-3 col-xs-6';

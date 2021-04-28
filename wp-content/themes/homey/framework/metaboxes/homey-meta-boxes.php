@@ -947,6 +947,7 @@ if( !function_exists( 'homey_register_metaboxes' ) ) {
                         '' => esc_html__('Default (Same settings as theme options)', 'homey'),
                         'booking_form' => esc_html__('Booking Form', 'homey'),
                         'contact_form' => esc_html__('Contact Form', 'homey'),
+                        'contact_form_to_guest' => esc_html__('Contact Form To Guest and Booking To User', 'homey'),
                     ),
                     'columns' => 12,
                     'tab' => 'settings',

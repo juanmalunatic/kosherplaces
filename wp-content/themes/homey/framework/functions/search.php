@@ -161,6 +161,12 @@ if(!function_exists('homey_search_date_format')) {
             $month = $get_date[1];
             $day = $get_date[0];
             
+        } elseif($homey_date_format == 'dd.mm.yy') {
+            $get_date = explode('.', $gdate);
+            $year = $get_date[2];
+            $month = $get_date[1];
+            $day = $get_date[0];
+
         } else {
             $return_date = $gdate;
         }

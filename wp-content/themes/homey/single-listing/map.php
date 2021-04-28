@@ -22,9 +22,13 @@ if($show_map) {
         <div id="homey-single-map" 
         data-zoom="<?php echo intval($map_zoom_level); ?>"
         data-pin-type="<?php echo esc_attr($detail_map_pin_type); ?>"
-        data-marker-pin="<?php echo esc_url($marker_pin[0]); ?>"
-        data-marker-pin-retina="<?php echo esc_url($marker_pin_retina[0]); ?>"
-        data-lat="<?php echo esc_attr($lat);?>" 
+        <?php if(isset($marker_pin[0])){ ?>
+             data-marker-pin="<?php echo esc_url($marker_pin[0]); ?>"
+        <?php } ?>
+        <?php if(isset($marker_pin_retina[0])){ ?>
+            data-marker-pin-retina="<?php echo esc_url($marker_pin_retina[0]); ?>"
+        <?php } ?>
+        data-lat="<?php echo esc_attr($lat);?>"
         data-long="<?php echo esc_attr($long);?>" class="map-section-map">
         </div>
     </div><!-- block -->

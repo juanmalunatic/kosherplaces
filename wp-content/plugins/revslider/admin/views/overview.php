@@ -7,10 +7,8 @@
 
 if(!defined('ABSPATH')) exit();
 
-$rs_slider		= new RevSliderFunctionsAdmin();
-$overview_data	= $rs_slider->get_slider_overview();
 
-$system_config	= $rs_slider->get_system_requirements();
+$system_config	= $rsaf->get_system_requirements();
 $current_user	= wp_get_current_user();
 $revslider_valid = get_option('revslider-valid', 'false');
 $latest_version	= get_option('revslider-latest-version', RS_REVISION);
@@ -26,7 +24,7 @@ if($time < '12'){
 }elseif($time >= '12' && $time < '17'){
 	$hi = __('Good Afternoon ', 'revslider');
 }
-$rs_languages	= $rs_slider->get_available_languages();
+$rs_languages	= $rsaf->get_available_languages();
 ?>
 <div id="rb_tlw">
 	<?php
@@ -206,11 +204,10 @@ $rs_languages	= $rs_slider->get_available_languages();
 			<div class="div10"></div>
 			<a class="cwt_link" target="_blank" href="https://instagram.com/sliderrevolution"><grayiconbox class="cwt_instagram"></grayiconbox><div class="pli_twoline"><div class="pli_subtitle"><?php _e('Instagram', 'revslider');?></div><div class="dynamicval pli_subtitle">instagram.com/sliderrevolution</div></div></a>
 			<div class="div10"></div>			
-			<a class="cwt_link" target="_blank" href="https://dribbble.com/themepunch"><grayiconbox class="cwt_dribbble"></grayiconbox><div class="pli_twoline"><div class="pli_subtitle"><?php _e('Dribbble', 'revslider');?></div><div class="dynamicval pli_subtitle">dribbble.com/themepunch</div></div></a>
+			<a class="cwt_link" target="_blank" href="https://dribbble.com/sliderrevolution"><grayiconbox class="cwt_dribbble"></grayiconbox><div class="pli_twoline"><div class="pli_subtitle"><?php _e('Dribbble', 'revslider');?></div><div class="dynamicval pli_subtitle">dribbble.com/sliderrevolution</div></div></a>
 			<div class="div100"></div>
-			<h3 class="pli_title"><?php _e('Signup to our Newsletter', 'revslider');?></h3>									
+			<h3 class="pli_title"><?php _e('Sign up to our Newsletter', 'revslider');?></h3>									
 			<!--<input class="codeinput" id="newsletter_mail" placeholder="<?php _e('Enter your Email', 'revslider');?>"/> id="signuptonewsletter" -->
-			<div class="div25"></div>
 			<a href="https://www.themepunch.com/links/newsletter" target="_blank"><bluebutton ><?php _e('Sign Up', 'revslider');?></bluebutton></a>
 			<div class="div25"></div>
 			<div class="infobox">
@@ -229,9 +226,9 @@ $rs_languages	= $rs_slider->get_available_languages();
 </div>
 
 <script type="text/javascript">
-	window.sliderLibrary = JSON.parse(<?php echo $rs_slider->json_encode_client_side(array('sliders' => $overview_data)); ?>);
-	window.rs_system = JSON.parse(<?php echo $rs_slider->json_encode_client_side($system_config); ?>);
-	var rvs_f_initOverView_Once = false
+	window.sliderLibrary = JSON.parse(<?php echo $rsaf->json_encode_client_side(array('sliders' => $rs_od)); ?>);
+	window.rs_system = JSON.parse(<?php echo $rsaf->json_encode_client_side($system_config); ?>);
+	var rvs_f_initOverView_Once = false;
 	if (document.readyState === "loading") 
 		document.addEventListener('readystatechange',function(){
 			if ((document.readyState === "interactive" || document.readyState === "complete") && !rvs_f_initOverView_Once) {

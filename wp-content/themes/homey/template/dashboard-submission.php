@@ -64,7 +64,7 @@ if( isset( $_POST['action'] ) ) {
 }
 get_header();
 //check before header to print message
-hm_validity_check();
+hm_validity_check();//check if users membership is expired or not
 $listing_limit_check = hm_listing_limit_check($userID);
 
 ?>

@@ -101,7 +101,7 @@
 .wp-block-categories-list.sub-menu,
 .wp-block-latest-posts.sub-menu,
 .wp-block-rss.sub-menu, .wp-block-embed.is-type-video, .gallery-item, .next-prev-block .prev-box a,
-.next-prev-block .next-box a, .related-post ul, .title .circle-icon, .top-contact-address-mobile li i, .top-contact-address li,
+.next-prev-block .next-box a, .related-post ul, .title .circle-icon, .content-area .map-section, .top-contact-address-mobile li i, .top-contact-address li,
 .top-slogan li, .header-top-bar, .mixed-search-side-banner .nav-tabs > li.active, .mixed-search-panel .nav-tabs, .filter-more-link, .filters a[data-toggle=collapse], .filter-text, .search-filter, .main-search, .pets-calculator .control, .widget-advanced-search, .search-destination,
 .search-guests,
 .search-date-range-arrive,
@@ -240,9 +240,9 @@
 }
 
 .display-table, .search-radius-slider, .half-map-search-inner-wrap, .header-top-bar .top-bar-inner, .mixed-search-nav, .search-banner > form.clearfix, .search-banner, .mobile-logo, .navi .homey-megamenu-wrap > .sub-menu,
-.listing-navi .homey-megamenu-wrap > .sub-menu, .about-section .block-bordered, .item-footer, .activitiy-item, .saved-search-block, .msg-to-agent-block, .listing-submit-wrap, .services-module.style3 .service-block, .taber-nav, .table-block, .print-main-wrap .block-section:before, .leaflet-popup-content:before, .search-extra-services li:before, .navi > .main-menu:before,
+.listing-navi .homey-megamenu-wrap > .sub-menu, .about-section .block-bordered, .item-footer, .activitiy-item, .saved-search-block, .msg-to-agent-block, .listing-submit-wrap, .services-module.style3 .service-block, .taber-nav, .table-block, .print-main-wrap .block-section:before, .search-extra-services li:before, .navi > .main-menu:before,
 .listing-navi > .main-menu:before, .what-nearby dd:before, .dashaboard-snake-nav-wrap:before, .payment-list ul li:before, .steps-nav:before, .house-features-list:before, .upload-gallery-thumb-buttons:before, .msg-type-block .msg-attachment-row:before, .msg-user-info:before, .dashboard-page-title:before, .block-verify:before,
-.block-bordered:before, .block-section:before, .block-body:before, .block-sub-title:before, .block-title:before, .block-head:before, .label-option-2-col:before, .label-option-3-col:before, .label-option-4-col:before, .detail-list:before, .print-main-wrap .block-section:after, .leaflet-popup-content:after, .search-extra-services li:after, .navi > .main-menu:after,
+.block-bordered:before, .block-section:before, .block-body:before, .block-sub-title:before, .block-title:before, .block-head:before, .label-option-2-col:before, .label-option-3-col:before, .label-option-4-col:before, .detail-list:before, .print-main-wrap .block-section:after, .search-extra-services li:after, .navi > .main-menu:after,
 .listing-navi > .main-menu:after, .what-nearby dd:after, .dashaboard-snake-nav-wrap:after, .payment-list ul li:after, .steps-nav:after, .house-features-list:after, .upload-gallery-thumb-buttons:after, .msg-type-block .msg-attachment-row:after, .msg-user-info:after, .dashboard-page-title:after, .block-verify:after,
 .block-bordered:after, .block-section:after, .block-body:after, .block-sub-title:after, .block-title:after, .block-head:after, .label-option-2-col:after, .label-option-3-col:after, .label-option-4-col:after, .detail-list:after {
   display: table;
@@ -965,12 +965,12 @@ a.text-grey-lighter:focus {
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.75) 100%);
   z-index: 1;
 }
-* @media (max-width: 991px) {
+@media (max-width: 991px) {
   .hover-effect:hover:before {
     opacity: 1;
   }
 }
-/* .hover-effect:hover img {
+.hover-effect:hover img {
   -webkit-transform: scale(1.05);
       -ms-transform: scale(1.05);
           transform: scale(1.05);
@@ -981,7 +981,7 @@ a.text-grey-lighter:focus {
         -ms-transform: scale(1);
             transform: scale(1);
   }
-} */
+}
 
 .effect-light:before {
   background-color: rgba(255, 255, 255, 0.3) !important;
@@ -1960,20 +1960,20 @@ button:active, button:hover, button:focus {
 
 /* clarfix
 /* ----------------------------------------------------------- */
-.print-main-wrap .block-section, .leaflet-popup-content, .search-extra-services li, .navi > .main-menu,
+.print-main-wrap .block-section, .search-extra-services li, .navi > .main-menu,
 .listing-navi > .main-menu, .what-nearby dd, .dashaboard-snake-nav-wrap, .payment-list ul li, .steps-nav, .house-features-list, .upload-gallery-thumb-buttons, .msg-type-block .msg-attachment-row, .msg-user-info, .dashboard-page-title, .block-verify,
 .block-bordered, .block-section, .block-body, .block-sub-title, .block-title, .block-head, .label-option-2-col, .label-option-3-col, .label-option-4-col, .detail-list {
   *zoom: 1;
 }
-.print-main-wrap .block-section:before, .leaflet-popup-content:before, .search-extra-services li:before, .navi > .main-menu:before,
+.print-main-wrap .block-section:before, .search-extra-services li:before, .navi > .main-menu:before,
 .listing-navi > .main-menu:before, .what-nearby dd:before, .dashaboard-snake-nav-wrap:before, .payment-list ul li:before, .steps-nav:before, .house-features-list:before, .upload-gallery-thumb-buttons:before, .msg-type-block .msg-attachment-row:before, .msg-user-info:before, .dashboard-page-title:before, .block-verify:before,
-.block-bordered:before, .block-section:before, .block-body:before, .block-sub-title:before, .block-title:before, .block-head:before, .label-option-2-col:before, .label-option-3-col:before, .label-option-4-col:before, .detail-list:before, .print-main-wrap .block-section:after, .leaflet-popup-content:after, .search-extra-services li:after, .navi > .main-menu:after,
+.block-bordered:before, .block-section:before, .block-body:before, .block-sub-title:before, .block-title:before, .block-head:before, .label-option-2-col:before, .label-option-3-col:before, .label-option-4-col:before, .detail-list:before, .print-main-wrap .block-section:after, .search-extra-services li:after, .navi > .main-menu:after,
 .listing-navi > .main-menu:after, .what-nearby dd:after, .dashaboard-snake-nav-wrap:after, .payment-list ul li:after, .steps-nav:after, .house-features-list:after, .upload-gallery-thumb-buttons:after, .msg-type-block .msg-attachment-row:after, .msg-user-info:after, .dashboard-page-title:after, .block-verify:after,
 .block-bordered:after, .block-section:after, .block-body:after, .block-sub-title:after, .block-title:after, .block-head:after, .label-option-2-col:after, .label-option-3-col:after, .label-option-4-col:after, .detail-list:after {
   content: " ";
   width: 100%;
 }
-.print-main-wrap .block-section:after, .leaflet-popup-content:after, .search-extra-services li:after, .navi > .main-menu:after,
+.print-main-wrap .block-section:after, .search-extra-services li:after, .navi > .main-menu:after,
 .listing-navi > .main-menu:after, .what-nearby dd:after, .dashaboard-snake-nav-wrap:after, .payment-list ul li:after, .steps-nav:after, .house-features-list:after, .upload-gallery-thumb-buttons:after, .msg-type-block .msg-attachment-row:after, .msg-user-info:after, .dashboard-page-title:after, .block-verify:after,
 .block-bordered:after, .block-section:after, .block-body:after, .block-sub-title:after, .block-title:after, .block-head:after, .label-option-2-col:after, .label-option-3-col:after, .label-option-4-col:after, .detail-list:after {
   clear: both;
@@ -2533,25 +2533,24 @@ button:active, button:hover, button:focus {
   font-weight: bold;
 }
 
-@media (min-width: 768px) {
-  .taxonomy-grid-2 .taxonomy-card,
+.taxonomy-grid-2 .taxonomy-card,
 .taxonomy-grid-2 .taxonomy-card a {
-    max-height: 90px;
-  }
+  max-height: 262px;
+  z-index: 0;
 }
-@media (min-width: 991px) {
+
+@media (max-width: 1999px) {
   .taxonomy-grid-2 .taxonomy-card,
 .taxonomy-grid-2 .taxonomy-card a {
     max-height: 212px;
   }
 }
-@media (min-width: 1200px) {
+@media (max-width: 991px) {
   .taxonomy-grid-2 .taxonomy-card,
 .taxonomy-grid-2 .taxonomy-card a {
-    max-height: 262px;
+    max-height: 157px;
   }
 }
-
 /* testimonials and partners module
 /* ----------------------------------------------------------- */
 .testimonials-module .slick-prev,
@@ -2932,39 +2931,6 @@ button:active, button:hover, button:focus {
   padding: 35px 0 0;
 }
 
-/* elementor
-/* ----------------------------------------------------------- */
-.form-group br {
-  display: none;
-}
-
-.property-module-grid .item-grid-view .item-wrap,
-.property-module-card .item-card-view .item-wrap {
-  width: calc(100% / 3);
-  max-width: inherit;
-}
-
-@media (max-width: 1200px) {
-  .property-module-grid .item-grid-view .item-wrap,
-.property-module-card .item-card-view .item-wrap {
-    width: calc(100% / 3);
-    max-width: inherit;
-  }
-}
-@media (max-width: 768px) {
-  .property-module-grid .item-grid-view .item-wrap,
-.property-module-card .item-card-view .item-wrap {
-    width: 50%;
-    max-width: 100%;
-  }
-}
-@media (max-width: 480px) {
-  .property-module-grid .item-grid-view .item-wrap,
-.property-module-card .item-card-view .item-wrap {
-    width: 100%;
-    max-width: 100%;
-  }
-}
 /* dashboard
 /* ----------------------------------------------------------- */
 .dashboard-wrap {
@@ -3080,8 +3046,14 @@ button:active, button:hover, button:focus {
 .account-dropdown ul {
   list-style: none;
 }
+.account-dropdown ul > li {
+  line-height: 5px !important;
+  font-size: 14px !important;
+}
 .account-dropdown ul > li a {
   padding: 23px;
+  line-height: 5px !important;
+  font-size: 14px !important;
 }
 .account-dropdown ul i {
   margin-right: 19px;
@@ -4202,9 +4174,6 @@ button:active, button:hover, button:focus {
     float: none;
   }
 }
-.item-list-view .item-amenities {
-  height: auto;
-}
 
 /* property item list layout for half map
 /* ----------------------------------------------------------- */
@@ -4311,9 +4280,8 @@ button:active, button:hover, button:focus {
   width: 36px;
 }
 .item-user-image img {
-  border-radius: 50% !important;
-  overflow: hidden !important;
-  border: 2px solid #fff !important;
+  border: 1px solid #fff;
+  border-radius: 100%;
 }
 
 .item-user-info {
@@ -4351,7 +4319,6 @@ button:active, button:hover, button:focus {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-size: 14px;
-/* 	display: none; */
 }
 
 .item-amenities {
@@ -4476,9 +4443,6 @@ button:active, button:hover, button:focus {
   -o-text-overflow: ellipsis;
      text-overflow: ellipsis;
 }
-.item-card-view .item-wrap .title-head .title a {
-  color: #fff;
-}
 .item-card-view .item-wrap .item-user-image {
   top: 20px;
   right: 20px;
@@ -4495,10 +4459,6 @@ button:active, button:hover, button:focus {
   margin-top: 0;
   margin-bottom: 0;
 }
-.item-card-view .item-amenities {
-  height: auto;
-}
-
 /* listing clear float
 /* ----------------------------------------------------------- */
 .item-grid-view .item-wrap:nth-child(2n):after,
@@ -4546,7 +4506,6 @@ button:active, button:hover, button:focus {
 
 .block-top-title address {
   margin-right: 10px;
-/* 	display: none; */
 }
 @media (max-width: 768px) {
   .block-top-title address {
@@ -6015,10 +5974,6 @@ button:active, button:hover, button:focus {
 
 .sub-menu {
   max-height: 0;
-  -webkit-transition: opacity 0.5s ease-in-out;
-  -o-transition: opacity 0.5s ease-in-out;
-  transition: opacity 0.5s ease-in-out;
-  top: 100%;
 }
 
 .active .sub-menu {
@@ -6307,7 +6262,6 @@ button:active, button:hover, button:focus {
 .search-date-range-arrive:after,
 .search-date-range-depart:after {
   content: "";
-	display: none;
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
@@ -6343,7 +6297,7 @@ button:active, button:hover, button:focus {
 .search-date-range .animated-label,
 .search-guests .animated-label {
   color: #949ca5;
-  left: 20px;
+  left: 50px;
   top: 6px;
   font-size: 12px;
   font-weight: 400;
@@ -6357,13 +6311,12 @@ button:active, button:hover, button:focus {
   top: 9px;
   font-family: "Fontawesome";
   font-size: 16px;
-	display: none;
 }
 .search-destination input,
 .search-guests input,
 .search-date-range-arrive input,
 .search-date-range-depart input {
-  padding: 0 0 0 15px;
+  padding: 0 0 0 40px;
 }
 
 .search-destination input,
@@ -6384,13 +6337,6 @@ button:active, button:hover, button:focus {
 .search-destination:after {
   content: "";
 }
-.search-destination.with-select {
-  line-height: 54px;
-}
-.search-destination.with-select .filter-option {
- margin-top: 12px;
-}
-
 .search-guests:after {
   content: "";
 }
@@ -6425,16 +6371,6 @@ button:active, button:hover, button:focus {
 
 .main-search .search-type.search-radius-dropdown .btn-group {
   min-width: 100px;
-}
-
-.search-radius-dropdown .bootstrap-select .dropdown-toggle .filter-option,
-.search-type .bootstrap-select .dropdown-toggle .filter-option {
-  color: #555555;
-}
-
-.search-banner .search-radius-dropdown .bootstrap-select .dropdown-toggle .filter-option,
-.search-banner .search-type .bootstrap-select .dropdown-toggle .filter-option {
-  line-height: 54px;
 }
 
 /*  advanced search widget
@@ -6578,7 +6514,6 @@ button:active, button:hover, button:focus {
   top: 17px;
   left: 20px;
   font-size: 18px;
-	display: none;
 }
 .search-banner .search-destination input.form-control, .search-banner .search-destination input.wpcf7-form-control, .search-banner .search-destination .wp-block-search input, .wp-block-search .search-banner .search-destination input, .search-banner .search-destination .post-password-form input[type=password], .post-password-form .search-banner .search-destination input[type=password], .search-banner .search-destination .searchform input, .searchform .search-banner .search-destination input,
 .search-banner .search-date-range input.form-control,
@@ -6629,7 +6564,7 @@ button:active, button:hover, button:focus {
 .post-password-form .search-banner .search-hours-range .search-hours-range-right input[type=password],
 .search-banner .search-hours-range .search-hours-range-right .searchform input,
 .searchform .search-banner .search-hours-range .search-hours-range-right input {
-  padding: 20px 0 20px 20px;
+  padding: 20px 0 20px 50px;
 }
 .search-banner .search-destination input.form-control::-moz-placeholder, .search-banner .search-destination input.wpcf7-form-control::-moz-placeholder, .search-banner .search-destination .wp-block-search input::-moz-placeholder, .wp-block-search .search-banner .search-destination input::-moz-placeholder, .search-banner .search-destination .post-password-form input[type=password]::-moz-placeholder, .post-password-form .search-banner .search-destination input[type=password]::-moz-placeholder, .search-banner .search-destination .searchform input::-moz-placeholder, .searchform .search-banner .search-destination input::-moz-placeholder,
 .search-banner .search-date-range input.form-control::-moz-placeholder,
@@ -6988,7 +6923,7 @@ button:active, button:hover, button:focus {
 .post-password-form .search-banner .search-hours-range .search-hours-range-right input.on-focus[type=password],
 .search-banner .search-hours-range .search-hours-range-right .searchform input.on-focus,
 .searchform .search-banner .search-hours-range .search-hours-range-right input.on-focus {
-  padding: 0px 0 1px 20px;
+  padding: 20px 0 1px 50px;
 }
 @media (max-width: 768px) {
   .search-banner .search-destination input.form-control.on-focus, .search-banner .search-destination input.on-focus.wpcf7-form-control, .search-banner .search-destination .wp-block-search input.on-focus, .wp-block-search .search-banner .search-destination input.on-focus, .search-banner .search-destination .post-password-form input.on-focus[type=password], .post-password-form .search-banner .search-destination input.on-focus[type=password], .search-banner .search-destination .searchform input.on-focus, .searchform .search-banner .search-destination input.on-focus,
@@ -7040,7 +6975,7 @@ button:active, button:hover, button:focus {
 .post-password-form .search-banner .search-hours-range .search-hours-range-right input.on-focus[type=password],
 .search-banner .search-hours-range .search-hours-range-right .searchform input.on-focus,
 .searchform .search-banner .search-hours-range .search-hours-range-right input.on-focus {
-    padding: 20px 0 20px 20px;
+    padding: 20px 0 20px 50px;
   }
 }
 .search-banner .search-hours-range .search-hours-range-left .bootstrap-select .btn span.filter-option, .search-banner .search-hours-range .search-hours-range-left .bootstrap-select .wpcf7-submit span.filter-option,
@@ -7769,7 +7704,7 @@ button:active, button:hover, button:focus {
 /* ----------------------------------------------------------- */
 .hourly-search-banner .search-destination {
   width: calc(31% - 10px);
-  min-width: 230px;
+  min-width: 270px;
 }
 @media (max-width: 1200px) {
   .hourly-search-banner .search-destination {
@@ -7838,8 +7773,6 @@ button:active, button:hover, button:focus {
 .hourly-search-banner .search-hours-range .search-hours-range-left button,
 .hourly-search-banner .search-hours-range .search-hours-range-right button {
   height: 56px;
-  line-height: 54px;
-  color: #555555;
 }
 .hourly-search-banner .search-hours-range .search-hours-range-left .dropdown-menu.open,
 .hourly-search-banner .search-hours-range .search-hours-range-right .dropdown-menu.open {
@@ -7860,7 +7793,7 @@ button:active, button:hover, button:focus {
 .gform_wrapper .hourly-search-banner .search-hours-range .search-hours-range-right .bootstrap-select .button span.filter-option:before,
 .hourly-search-banner .search-hours-range .search-hours-range-right .bootstrap-select .gform_button span.filter-option:before,
 .hourly-search-banner .search-hours-range .search-hours-range-right .bootstrap-select .btn span.filter-option:before {
-  top: 0;
+  top: 7px;
   font-size: 20px;
 }
 .hourly-search-banner .search-guests {
@@ -8360,7 +8293,7 @@ button:active, button:hover, button:focus {
 /* ------------------------------------------------------------------------ */
 .overlay-booking-btn {
   bottom: 0;
-  z-index: 3002;
+  z-index: 999;
   padding: 11px 15px 8px;
   background-color: #fff;
   border-top: 1px solid;
@@ -8393,7 +8326,7 @@ button:active, button:hover, button:focus {
   -o-transition: transform 0.5s, visibility 0s 0.5s;
   transition: transform 0.5s, visibility 0s 0.5s;
   transition: transform 0.5s, visibility 0s 0.5s, -webkit-transform 0.5s;
-  z-index: 3003;
+  z-index: 1000;
   height: 100vh;
   overflow: scroll;
   background-color: #fff;
@@ -8490,6 +8423,10 @@ button:active, button:hover, button:focus {
   .single-listing .footer-bottom-wrap {
     margin-bottom: 60px;
   }
+}
+
+.content-area .map-section {
+  z-index: -1;
 }
 
 /* google maps info window
@@ -8760,19 +8697,6 @@ button:active, button:hover, button:focus {
       -ms-transform: translate(0, -50%);
           transform: translate(0, -50%);
   top: 50%;
-}
-
-/* Open street map info window
-/* ----------------------------------------------------------- */
-.leaflet-popup-content {
-  margin: 0 !important;
-}
-
-.homey-open-street-map .item-amenities {
-  height: auto;
-}
-.homey-open-street-map .item-media-thumb img {
-  height: 130px;
 }
 
 /* booking page
@@ -9983,7 +9907,7 @@ form[class^=wp-block] {
 }
 
 .banner-caption-side-search {
-  z-index: 2;
+  z-index: 1;
   height: 554px;
 }
 @media (max-width: 991px) {
@@ -10171,16 +10095,6 @@ form[class^=wp-block] {
   overflow-y: unset;
 }
 
-@media (min-width: 1680px) {
-  #homey_halfmap_listings_container .item-wrap:nth-child(2n+1) {
-    clear: none;
-  }
-}
-@media (max-width: 1679px) {
-  #homey_halfmap_listings_container .item-wrap:nth-child(2n+1) {
-    clear: both;
-  }
-}
 @media (min-width: 1680px) {
   .half-map-left-wrap {
     width: 1170px;
@@ -10957,13 +10871,6 @@ form[class^=wp-block] {
   padding: 0;
 }
 
-/* fix jquery ui calendar modal windows
-/* ----------------------------------------------------------- */
-.ui-widget.ui-widget-content {
-  height: auto;
-  padding: 10px 15px;
-}
-
 /* rating
 /* ------------------------------------------------------------------------ */
 .rating {
@@ -11597,6 +11504,13 @@ form[class^=wp-block] {
 .half-map-search-inner-wrap .search-hours-range .search-hours-range-right {
   margin-bottom: 0;
 }
+.half-map-search-inner-wrap .search-destination .clear-input-btn {
+  height: 38px !important;
+  width: 38px;
+}
+.half-map-search-inner-wrap .search-destination.with-select .filter-option {
+  line-height: 40px;
+}
 
 .half-map-search {
   background-color: #fff;
@@ -11734,6 +11648,7 @@ html .ui-button.ui-state-disabled:active {
 
 .ui-widget.ui-widget-content {
   border: 1px solid #d8dce1;
+  height: auto;
 }
 
 /* hourly half map search

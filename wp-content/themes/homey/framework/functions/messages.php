@@ -266,15 +266,14 @@ if ( !function_exists( 'homey_thread_message_filter' ) ) {
         );
 
 		$homey_thread = $wpdb->get_row( $message_query );
-		$receiver_id = $homey_thread->sender_id;
-
-		if ( $receiver_id == $created_by ) {
-			$receiver_id = $homey_thread->receiver_id;
-		}
+        $receiver_id  = $homey_thread->receiver_id;
+		$sender_id    = $homey_thread->sender_id;
 
 		$receiver_data = get_user_by( 'id', $receiver_id );
-
 		apply_filters( 'homey_message_email_notification', $thread_id, $message, $receiver_data->user_email, $created_by );
+
+        $sender_data = get_user_by( 'id', $sender_id );
+		apply_filters( 'homey_message_email_notification', $thread_id, $message, $sender_data->user_email, $created_by );
 
 		return $message_id;
 

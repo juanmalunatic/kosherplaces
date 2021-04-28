@@ -45,9 +45,10 @@ if(!function_exists('homeyEditListingDaysInMonth')) {
             $month = gmdate('m', $timeNow);
         }
 
+
         $unixMonth = mktime(0, 0 , 0, $month, 1, $year);
-             
-        return date('t', $unixMonth);;
+
+        return date('t', $unixMonth);
     }
 }
 

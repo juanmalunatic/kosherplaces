@@ -54,11 +54,11 @@ if(homey_is_admin()) {
     } else {
         $total_query = 'SELECT COUNT(sender_id) as total_results
         FROM '.$tabel.' 
-        ORDER BY id DESC';
+        ORDER BY seen ASC';
 
         $message_query = 'SELECT * 
         FROM '.$tabel.' 
-        ORDER BY id DESC LIMIT '.$offset.', '.$items_per_page;
+        ORDER BY seen ASC LIMIT '.$offset.', '.$items_per_page;
     }
 
 } else {

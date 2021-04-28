@@ -67,6 +67,17 @@ jQuery(document).ready( function($) {
             pending_hours_array   = JSON.parse (pending_hours_array);
         }
 
+        setInterval(function() {
+            $("select").each(function(e) {
+                if($(this).hasClass('error')){
+                    $("label[for='"+$(this).attr('id')+"']").addClass("select_input_error");
+                }else{
+                    $("label[for='"+$(this).attr('id')+"']").removeClass("select_input_error");
+                }
+            });
+        }, 500);
+
+
         /*$(document).ready(function() {
           $(window).keydown(function(event){
             if(event.keyCode == 13) {
@@ -650,24 +661,23 @@ jQuery(document).ready( function($) {
         var selected = null;
 
         function keyup_fill(ele, ele_place) {
-            $(ele).on("keyup", function(event) {
-                if ($(ele).attr("name") === "night_price") {
-                    if (!$.isNumeric($(ele).val())) {
-                        return
+
+                $(ele).on("keyup", function(event) {
+                    if ($(ele).attr("name") === "night_price") {
+                        if (!$.isNumeric($(ele).val())) {
+                            return
+                        }
                     }
-                }
 
-                if ($(ele).attr("name") === "listing_bedrooms" || $(ele).attr("name") === "guests" || $(ele).attr("name") === "baths") {
-                    if (!$.isNumeric($(ele).val())) {
-                        return
+                    if ($(ele).attr("name") === "listing_bedrooms" || $(ele).attr("name") === "guests" || $(ele).attr("name") === "baths") {
+                        if (!$.isNumeric($(ele).val())) {
+                            return
+                        }
                     }
-                }
 
-
-
-                var newText = event.target.value;
-                $(ele_place).html(newText);
-            });
+                    var newText = event.target.value;
+                    $(ele_place).html(newText);
+                });
         }
 
         keyup_fill("#listing_title", "#title-place");

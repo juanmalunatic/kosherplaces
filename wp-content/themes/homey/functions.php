@@ -11,6 +11,11 @@
 
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 global $wp_version;
+
+require 'framework/functions/Carbon/autoload.php';
+
+use Carbon\Carbon;
+
 /**
 *	---------------------------------------------------------------
 *	Define constants
@@ -18,7 +23,7 @@ global $wp_version;
 */
 define( 'HOMEY_THEME_NAME', 'Homey' );
 define( 'HOMEY_THEME_SLUG', 'homey' );
-define( 'HOMEY_THEME_VERSION', '1.6.4' );
+define( 'HOMEY_THEME_VERSION', '1.6.5' );
 define( 'HOMEY_CSS_DIR_URI', get_template_directory_uri() . '/css/' );
 define( 'HOMEY_JS_DIR_URI', get_template_directory_uri() . '/js/' );
 /**
@@ -579,8 +584,13 @@ function extending_listing_search_where( $where ) {
 
 function update_homey_membership_plan($post_ID, $post_after, $post_before){
    if($post_after->post_type == 'hm_homey_memberships'){
-       delete_option($post_ID.'_'.homey_option('paypal_client_id'));// to delete plan for paypal
-       delete_option($post_ID.'_'.homey_option('stripe_publishable_key'));//to delete plan for stripe
+       $hm_options = get_option('hm_memberships_options');
+
+       delete_option($post_ID.'_'.$hm_options['paypal_client_id']);// to delete plan for paypal
+       delete_option('hm_prod_id__'.$hm_options['paypal_client_id']);// to delete plan for paypal
+
+       delete_option($post_ID.'_'.$hm_options['stripe_pk']);//to delete plan for stripe
+       delete_option('hmStripePid_'.$hm_options['stripe_pk']);//to delete plan for stripe
    }
 }
 
@@ -593,9 +603,7 @@ function homey_listing_image_dimension($file)
     $dimensions = explode('x', homey_option('upload_image_min_dimensions'));
     $width = isset($dimensions[0]) ? (int)$dimensions[0] : 1200;
     $heigth = isset($dimensions[1]) ? (int)$dimensions[1] : 640;
-@ini_set( 'upload_max_size' , '64M' );
-@ini_set( 'post_max_size', '64M');
-@ini_set( 'max_execution_time', '300' );
+
     $minimum = array('width' => $width, 'height' => $heigth);
     $width = $img[0];
     $height = $img[1];
@@ -605,5 +613,103 @@ function homey_listing_image_dimension($file)
     }
 
     return 1;
+}
+
+if (!function_exists('fancybox_gallery_html')) {
+    function fancybox_gallery_html($images = null, $gallery_class = null)
+    {
+        $html = '';
+        foreach ($images as $image) {
+            $html .= '<a style="display:none;" href="' . esc_url($image['full_url']) . '" class="' . $gallery_class . '">
+                <img class="img-responsive" data-lazy="' . esc_url($image['url']) . '" src="' . esc_url($image['url']) . '" alt="' . esc_attr($image['alt']) . '">
+            </a>';
+        }
+        echo $html;
+    }
+}
+
+if (!function_exists('get_number_of_days_for_months')) {
+    function get_number_of_days_for_months($check_in_date, $check_out_date)
+    {
+
+        $check_in_date = Carbon::parse($check_in_date);
+        $check_out_date = Carbon::parse($check_out_date);
+        $i = 0;
+
+        $diffForMaxDays   = $check_in_date->diffInDays($check_out_date);
+        $diffForMaxMonths = $check_in_date->diffInMonths($check_out_date);
+        $diffForMaxYears  = $check_in_date->diffInYears($check_out_date);
+
+        $days = 0;
+
+        while($diffForMaxMonths > $i){
+            $newMonthDays = $check_in_date->copy()->addMonths($i);
+            //echo ' days in month ';
+            $days += $newMonthDays->daysInMonth;
+            //echo $days;
+            //echo ' , current month= '. $newMonthDays->format('m');
+            //echo '<br>';
+            $i++;
+        }
+
+        $remaining_days = $days >= $diffForMaxDays ?  $days - $diffForMaxDays : $diffForMaxDays - $days;
+
+        $data['days_after_months'] = $remaining_days;
+        $data['remaining_nights']  = $remaining_days;
+        $data['total_months']      = $diffForMaxMonths;
+
+        return $data;
+    }
+}
+
+if(isset($_GET['all_export_ics'])){
+    $args = array(
+        'post_type'        =>  'listing',
+    );
+    $urls_html = '';
+    $listing_qry = new WP_Query($args);
+
+    while ($listing_qry->have_posts()){
+        $listing_qry->the_post();
+        $listing_id    = get_the_ID();
+
+        $iCalendar ="BEGIN:VCALENDAR\r\n";
+        $iCalendar.="PRODID:-//Booking Calendar//EN\r\n";
+        $iCalendar .= "VERSION:2.0";
+        $iCalendar .= homey_get_booked_dates_for_icalendar($listing_id);
+        $iCalendar.="
+        END:VCALENDAR";
+
+        $base_folder_path = WP_CONTENT_DIR . "/uploads/listings-calendars/";
+        $upload_folder   =  $base_folder_path;
+
+        if (!file_exists($upload_folder)) {
+            mkdir($upload_folder, 0777, true);
+        }
+
+        $filename_to_be_saved = $listing_id.'-'.date("Y").'-'.date("m").'-'.date("d").".ics";
+        $upload_url      = content_url() . "/uploads/listings-calendars/{$filename_to_be_saved}";
+
+        file_put_contents($upload_folder.$filename_to_be_saved, $iCalendar);
+
+        echo $upload_url.'<br>';
+
+        $ical_feeds_meta = get_post_meta($listing_id, 'homey_ical_feeds_meta', true);
+        $urls_html = '';
+        foreach ($ical_feeds_meta as $key => $value) {
+            $urls_html .= $value['feed_name'].' - '.$value['feed_url'];
+            $urls_html .= "<br>";
+        }
+        $filename_to_be_saved = 'feeds-urls-'.$listing_id.'-'.date("Y").'-'.date("m").'-'.date("d").".html";
+        $upload_url      = content_url() . "/uploads/listings-calendars/{$filename_to_be_saved}";
+
+        file_put_contents($upload_folder.$filename_to_be_saved, $urls_html);
+
+        echo 'listing ID# '.$listing_id.' feeds urls in - > '.$upload_url.'<br>';
+
+    }
+
+    echo 'all listings exported in /uploads/listings-calendars';
+    exit();
 }
 ?>

@@ -1093,8 +1093,8 @@
             };
 
             var mapDiv = $('#map');
-            var maplat = mapDiv.data('add-lat');
-            var maplong = mapDiv.data('add-long');
+            var maplat = parseInt(mapDiv.data('add-lat'));
+            var maplong = parseInt(mapDiv.data('add-long'));
 
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: maplat, lng: maplong},
@@ -1390,10 +1390,11 @@
             $('input[name="search_area"]').val('');
             $('input[name="search_country"]').val('');
 
-            $('input[name="lat"]').val(place.geometry.locatiohomey-woo-reservation-payn.lat());
+            $('input[name="lat"]').val(place.geometry.location.lat());
             $('input[name="lng"]').val(place.geometry.location.lng());
 
             //var latLng = new google.maps.LatLng( place.geometry.location.lat(), place.geometry.location.lng() );
+            
 
             // Get each component of the address from the place details
             // and fill the corresponding field on the form.

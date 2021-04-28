@@ -3,7 +3,7 @@
 Plugin Name: Homey Core
 Plugin URI:  http://themeforest.net/user/favethemes
 Description: Adds functionality to Favethemes Themes
-Version:     1.6.4
+Version:     1.6.5
 Author:      Favethemes
 Author URI:  http://themeforest.net/user/favethemes
 License:     GPL2
@@ -18,8 +18,8 @@ define( 'HOMEY_PLUGIN_PATH',              dirname( __FILE__ ));
 define( 'HOMEY_ADMIN_IMAGES_URL',         HOMEY_PLUGIN_URL  . 'assets/images/');
 define( 'HOMEY_TEMPLATES',                HOMEY_PLUGIN_PATH . '/templates/');
 define( 'HOMEY_DS',                       DIRECTORY_SEPARATOR);
-define( 'HOMEY_VERSION', '1.6.0' );
-define( 'HOMEY_PLUGIN_CORE_VERSION', '1.6.0' );
+define( 'HOMEY_VERSION', '1.6.5' );
+define( 'HOMEY_PLUGIN_CORE_VERSION', '1.6.5' );
 define( 'HOMEY_PLUGIN_BASENAME',          plugin_basename(__FILE__));
 
 //Main plugin file

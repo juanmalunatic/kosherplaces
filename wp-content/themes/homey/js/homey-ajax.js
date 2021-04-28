@@ -2953,7 +2953,8 @@ jQuery(document).ready(function ($) {
                 },
                 success: function(data) { 
                     if ( data.success != false ) {
-                        window.location.href= HOMEY_ajax_vars.woo_checkout_url;
+                        var urlWithGetVars = HOMEY_ajax_vars.woo_checkout_url+'?check_in='+check_in+'&check_out='+check_out+'&guests='+guests+'&extra_options='+extra_options+'&listing_id='+listing_id+'&renter_message='+renter_message;
+                        window.location.href = urlWithGetVars;
                     } else {
                         $('#homey_modal').modal('hide');
                     }

@@ -639,7 +639,7 @@ msgstr ""
 
 #: localization.php:136 localization.php:388
 msgid "City fee"
-msgstr "City feezzz"
+msgstr ""
 
 #: localization.php:137
 msgid "Enter the price for city fee"
@@ -1031,12 +1031,12 @@ msgstr ""
 #: localization.php:253
 #, fuzzy
 msgid "Weekly - 7+ nights"
-msgstr "Weekly - 7+ nights - here we can amend this text"
+msgstr ""
 
 #: localization.php:254
 #, fuzzy
 msgid "Monthly - 30+ nights"
-msgstr "or we can remove whole text to new Monthly - 30+ nights"
+msgstr ""
 
 #: localization.php:257
 msgid "Additional costs"
@@ -1513,7 +1513,7 @@ msgstr ""
 
 #: localization.php:391
 msgid "Taxes"
-msgstr "cs taxes"
+msgstr ""
 
 #: localization.php:392
 msgid "Payment due"
@@ -1524,8 +1524,8 @@ msgid "Balance due of"
 msgstr ""
 
 #: localization.php:394
-msgid "for your reservation"
-msgstr "locall wali payment ha, karni parry gi, sahi ha?"
+msgid "to pay locally to the host"
+msgstr ""
 
 #: localization.php:396
 msgid "Poor"
@@ -5175,7 +5175,7 @@ msgid "upfront payment while booking"
 msgstr ""
 
 #: template-parts/dashboard/wallet/detail.php:110
-msgid "paid"
+msgid "paid locally to the host"
 msgstr ""
 
 #: template-parts/dashboard/wallet/detail.php:113

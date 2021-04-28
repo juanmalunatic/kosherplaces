@@ -199,11 +199,11 @@ if( !homey_give_access($reservationID) ) {
                                     </div><!-- block-left -->
                                     <div class="block-right">
                                         <?php if(!empty($renter_info['photo'])) {
-                                            echo '<a href="'.esc_url("/dashboard/?dpage=users&user-id=".$renter_id).'" target="_blank">'.$renter_info['photo'].'</a>';
+                                            echo '<a href="'.esc_url(get_site_url(null, "dashboard/?dpage=users&user-id=".$renter_id)).'" target="_blank">'.$renter_info['photo'].'</a>';
                                         }?>
                                         <ul class="detail-list">
                                             <li><strong><?php esc_html_e('From', 'homey'); ?>:</strong> 
-                                                <a href="<?php echo esc_url("/dashboard/?dpage=users&user-id=".$renter_id); ?>" target="_blank">
+                                                <a href="<?php echo esc_url(get_site_url(null, "dashboard/?dpage=users&user-id=".$renter_id)); ?>" target="_blank">
                                                     <?php echo esc_attr($renter_info['name']); ?>
                                                 </a>
                                             </li>

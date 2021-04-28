@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: waqasriaz
+ * User: saad
  * Date: 16/01/16
  * Time: 6:11 PM
  */
@@ -43,8 +43,10 @@ if( !function_exists('homey_login') ) {
             wp_die();
         }
 
-
-        homey_google_recaptcha_callback();
+        $enable_reCaptcha = homey_option('enable_reCaptcha');
+        if( $enable_reCaptcha == 1 ) {
+            homey_google_recaptcha_callback();
+        }
 
         wp_clear_auth_cookie();
 
@@ -76,6 +78,7 @@ if( !function_exists('homey_login') ) {
             wp_set_auth_cookie( $user->ID );
             global $current_user;
             $current_user = wp_get_current_user();
+            update_user_meta($user->ID, 'is_email_verified', 1);
 
             echo json_encode( array( 'success' => true, 'msg' => esc_html__('Login successful, redirecting...', 'homey-login-register') ) );
 
@@ -103,7 +106,7 @@ if( !function_exists('homey_register') ) {
         $email             = trim( sanitize_text_field( wp_kses( $_POST['useremail'], $allowed_html ) ));
         $term_condition    = wp_kses( $_POST['term_condition'], $allowed_html );
         $enable_password = homey_option('enable_password');
-        $response = $_POST["g-recaptcha-response"];
+        $response = isset($_POST["g-recaptcha-response"])?$_POST["g-recaptcha-response"]:'';
 
         $user_role = get_option( 'default_role' );
 
@@ -222,6 +225,7 @@ if( !function_exists('homey_wp_new_user_notification') ) {
         // Send notification to admin
         $args = array(
             'user_login_register' => $user_login,
+            'user_profile' => site_url("author/".$user_login),
             'user_email_register' => $user_email
         );
         homey_email_composer( get_option('admin_email'), 'admin_new_user_register', $args );

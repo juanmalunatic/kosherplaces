@@ -42,7 +42,7 @@ if($property_status == 'publish') {
     $property_status = esc_html__('Disabled', 'homey');
 } else {
     $status_class = "label-success";
-    $property_status = esc_html__('Published', 'homey');
+    $property_status = esc_html__(strtoupper($property_status), 'homey');
 
 }
 

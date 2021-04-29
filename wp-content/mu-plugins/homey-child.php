@@ -249,5 +249,4 @@ function homey_grids($atts, $content = null)
     return $result;
 
 }
-
-
+add_shortcode('homey-grids', 'homey_grids');

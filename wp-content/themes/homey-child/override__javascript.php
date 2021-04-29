@@ -480,7 +480,16 @@ function homey_scripts()
         wp_enqueue_script('jquery-validate-min', get_template_directory_uri() . '/js/jquery.validate.min.js', array('jquery'), '1.15.0', true);
         wp_enqueue_script('bootbox-min', get_template_directory_uri() . '/js/bootbox.min.js', array('jquery'), '4.4.0', true);
 
-        wp_enqueue_script('homey-listing', get_template_directory_uri() . '/js/homey-listing.js', array('jquery', 'plupload', 'jquery-ui-sortable'), HOMEY_THEME_VERSION, true);
+        // JM change
+        // wp_enqueue_script('homey-listing', get_template_directory_uri() . '/js/homey-listing.js', array('jquery', 'plupload', 'jquery-ui-sortable'), HOMEY_THEME_VERSION, true);
+        wp_enqueue_script(
+            'homey-listing',
+            get_stylesheet_directory_uri() . '/js/homey-listing.js',
+            array('jquery', 'plupload', 'jquery-ui-sortable'),
+            HOMEY_THEME_VERSION,
+            true
+        );
+        // \JM change
 
 
         if( isset($_GET['edit_listing']) && $_GET['edit_listing'] != '' ) {

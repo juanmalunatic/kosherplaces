@@ -1223,24 +1223,49 @@ jQuery(document).ready(function ($) {
                     extra_options.push(temp_opt);
                 }
             });
-            
-            if( parseInt( userID, 10 ) === 0 ) {
+
+            // Gather state variables to decide what to do
+            var storage = window.sessionStorage;
+            var isGuestUser = (parseInt( userID, 10 ) === 0);
+            var savedReqData = storage.getItem('reservationRequestData');
+            var foundSavedData = (savedReqData !== null);
+
+            let reservationRequestData = {};
+
+            // If we're logged in and there's saved data, prefer that data
+            if (!isGuestUser && foundSavedData) {
+                // We restore the data and continue as normal
+                reservationRequestData = JSON.parse(savedReqData);
+                storage.removeItem('reservationRequestData');
+                // Update security token
+                reservationRequestData['security'] = security;
+
+                // TODO populate the fields with the stored data
+                // TODO test flow while registering
+            } else {
+                // We gather data from the fields processed above
+                reservationRequestData = {
+                    'action': 'homey_add_reservation',
+                    'check_in_date': check_in_date,
+                    'check_out_date': check_out_date,
+                    'guests': guests,
+                    'listing_id': listing_id,
+                    'extra_options': extra_options,
+                    'guest_message': guest_message,
+                    'security': security
+                };
+            }
+
+            if (isGuestUser && !foundSavedData) {
+                // We save the guest's data to restore it after the page reloads
+                storage.setItem('reservationRequestData', JSON.stringify(reservationRequestData));
                 $('#modal-login').modal('show');
             } else {
                 $.ajax({
                     type: 'post',
                     url: ajaxurl,
                     dataType: 'json',
-                    data: {
-                        'action': 'homey_add_reservation',
-                        'check_in_date': check_in_date,
-                        'check_out_date': check_out_date,
-                        'guests': guests,
-                        'listing_id': listing_id,
-                        'extra_options': extra_options,
-                        'guest_message': guest_message,
-                        'security': security
-                    },
+                    data: reservationRequestData,
                     beforeSend: function( ) {
                         $this.children('i').remove();
                         $this.prepend('<i class="fa-left '+process_loader_spinner+'"></i>');
@@ -3060,4 +3085,41 @@ jQuery(document).ready(function ($) {
             $("input[name='_wp_http_referer']").val(newRefereUrl);
         }
     }
+
+    var waitForEl = function(selector, callback) {
+        if (jQuery(selector).length) {
+            callback();
+        } else {
+            setTimeout(function() {
+                waitForEl(selector, callback);
+            }, 100);
+        }
+    };
+
+    function attempt_reservationrequest_recovery() {
+
+        console.log("Attempting");
+
+        // If we arrive at a booking page after login redirection, we'll have two conditions
+        // - We are at a reservationPage (duh! but we want to avoid triggering this on other pages)
+        // - There's some saved data from before the redirection
+
+        // Page elements
+        var buttonSelectors = '#request_for_reservation, #request_for_reservation_mobile';
+        var isReservationPage = ($(buttonSelectors).length > 0);
+
+        // Saved data
+        var sessionStorage = window.sessionStorage;
+        var reservationRequestData = sessionStorage.getItem('reservationRequestData');
+        var isSavedReqData = (reservationRequestData !== null)
+
+        if (isReservationPage && isSavedReqData) {
+            waitForEl('.payment-list-price-detail-total-price', function() {
+                console.log("Data found & reservation page: clicking");
+                $(buttonSelectors).first().trigger("click");
+            });
+        }
+    }
+
+    attempt_reservationrequest_recovery();
 }); // end document ready

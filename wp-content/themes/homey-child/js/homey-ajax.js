@@ -1,6 +1,16 @@
 jQuery(document).ready(function ($) {
     "use strict";
 
+    const waitForEl = function(selector, callback) {
+        if (jQuery(selector).length) {
+            callback();
+        } else {
+            setTimeout(function() {
+                waitForEl(selector, callback);
+            }, 100);
+        }
+    };
+
     if ( typeof HOMEY_ajax_vars !== "undefined" ) {
         
         var ajaxurl = HOMEY_ajax_vars.admin_url+ 'admin-ajax.php';
@@ -1189,6 +1199,28 @@ jQuery(document).ready(function ($) {
         /* ------------------------------------------------------------------------ */
         /*  Reservation Request
          /* ------------------------------------------------------------------------ */
+         const populateFields = (reservationRequestData) => {
+             const data = reservationRequestData;
+             /*
+             reservationRequestData = {
+                 'action': 'homey_add_reservation',
+                 'check_in_date': check_in_date,
+                 'check_out_date': check_out_date,
+                 'guests': guests,
+                 'listing_id': listing_id,
+                 'extra_options': extra_options,
+                 'guest_message': guest_message,
+                 'security': security
+             };
+             */
+             $('input[name="arrive"]').val(data['check_in_date']);
+             $('input[name="depart"]').val(data['check_out_date']);
+             $('textarea[name="guest_message"]').val( data['guest_message']);
+             $('input[name="guests"]').val(data['guests']);
+             // TODO Extra options. They will be lost for now.
+         }
+
+
          $('#request_for_reservation, #request_for_reservation_mobile').on('click', function(e){
             e.preventDefault();
 
@@ -1239,9 +1271,7 @@ jQuery(document).ready(function ($) {
                 storage.removeItem('reservationRequestData');
                 // Update security token
                 reservationRequestData['security'] = security;
-
-                // TODO populate the fields with the stored data
-                // TODO test flow while registering
+                populateFields(reservationRequestData);
             } else {
                 // We gather data from the fields processed above
                 reservationRequestData = {
@@ -1274,7 +1304,10 @@ jQuery(document).ready(function ($) {
                         if( data.success ) {
                             $('.check_in_date, .check_out_date').val('');
                             notify.prepend('<div class="notify text-success text-center btn-success-outlined btn btn-full-width">'+data.message+'</div>');
-                            
+                            // Somehow, from-to are lost, so we repopulate.
+                            waitForEl('.text-success', () => {
+                                populateFields(reservationRequestData)
+                            });
                         } else {
                             notify.prepend('<div class="notify text-danger text-center btn-danger-outlined btn btn-full-width">'+data.message+'</div>');
                             
@@ -3086,20 +3119,7 @@ jQuery(document).ready(function ($) {
         }
     }
 
-    var waitForEl = function(selector, callback) {
-        if (jQuery(selector).length) {
-            callback();
-        } else {
-            setTimeout(function() {
-                waitForEl(selector, callback);
-            }, 100);
-        }
-    };
-
     function attempt_reservationrequest_recovery() {
-
-        console.log("Attempting");
-
         // If we arrive at a booking page after login redirection, we'll have two conditions
         // - We are at a reservationPage (duh! but we want to avoid triggering this on other pages)
         // - There's some saved data from before the redirection
@@ -3115,7 +3135,7 @@ jQuery(document).ready(function ($) {
 
         if (isReservationPage && isSavedReqData) {
             waitForEl('.payment-list-price-detail-total-price', function() {
-                console.log("Data found & reservation page: clicking");
+                // console.log("Data found & reservation page: clicking");
                 $(buttonSelectors).first().trigger("click");
             });
         }

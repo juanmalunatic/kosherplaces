@@ -16,3 +16,15 @@ Template: homey
 
 /* Your CSS code goes here
 -------------------------------------- */
+
+/* added search-destination for specificity: override BS defaults */
+.search-destination .bootstrap-select .dropdown-toggle .filter-option {
+    line-height: 54px;
+    text-align: center;
+}
+
+/* improve searchbar usability */
+.search-banner .search-destination .dropdown-menu.open input.form-control {
+    padding: 0;
+    padding-left: 14px;
+}

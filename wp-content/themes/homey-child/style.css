@@ -62,3 +62,50 @@ Template: homey
     left: 9px;
 }
 */
+
+/**
+Frontpage fixes for Featured Places
+ */
+
+.property-item .media-body.item-body {
+    background: #eef4f4;
+}
+
+.property-item .item-address {
+    margin-bottom: 15px;
+}
+
+
+.property-item .item-footer {
+    margin-top: 5px;
+}
+
+.slick-slide .item-amenities .item-type {
+    display: block;
+    width:100%;
+    margin-top: 15px;
+    font-weight: 500;
+    color: #949ca5;
+}
+
+.property-item .item-amenities {
+    padding-left: 0;
+}
+.property-item .item-amenities * {
+    font-size: 1.3rem;
+}
+
+.property-item .title {
+    text-transform: capitalize;
+}
+
+.property-item .media-left {
+    height: 180px;
+}
+
+.property-item .item-media-thumb,
+.property-item .item-media-thumb a img {
+    height: 180px;
+    object-fit: cover;
+    object-position: center center;
+}

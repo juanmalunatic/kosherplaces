@@ -1,4 +1,4 @@
-console.log("Listín");
+//console.log("Listín");
 
 jQuery(document).ready( function($) {
     "use strict";
@@ -1303,7 +1303,7 @@ jQuery(document).ready( function($) {
         $( '#add_more_bedrooms' ).on('click', function( e ){
 
             // TODO add code here
-            
+
             e.preventDefault();
 
             var numVal = $(this).data("increment") + 1;

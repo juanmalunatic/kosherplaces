@@ -109,3 +109,15 @@ Frontpage fixes for Featured Places
     object-fit: cover;
     object-position: center center;
 }
+
+
+/** Admin menu fixes **/
+.board-panel-menu a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    white-space: nowrap;
+    font-size: 1.3rem;
+    padding: 0 15px;
+}

@@ -175,7 +175,6 @@ EDIT LISTING
 ADD LISTING
  */
 
-.instant-booking-holder {
-    margin-left: -15px;
-    padding-right: 0 !important;
+.instant-booking-holder .control--checkbox {
+    height: 42px;
 }

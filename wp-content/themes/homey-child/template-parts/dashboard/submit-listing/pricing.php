@@ -44,7 +44,7 @@ if(@$hide_fields['price_postfix'] != 1) {
     
                 <?php if($hide_fields['instant_booking'] != 1) { ?>
                 <div class="<?php echo esc_attr($instance_classes); ?>">
-                    <div class="form-group col-sm-6 instant-booking-holder">
+                    <div class="form-group instant-booking-holder">
                         <label><?php echo esc_attr(homey_option('ad_ins_booking_label')); ?></label>
                         <label class="control control--checkbox radio-tab"><?php echo esc_attr(homey_option('ad_ins_booking_des')); ?>
                             <input type="checkbox" name="instant_booking">

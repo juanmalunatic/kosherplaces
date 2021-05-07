@@ -121,3 +121,51 @@ Frontpage fixes for Featured Places
     font-size: 1.3rem;
     padding: 0 15px;
 }
+
+/**
+EDIT LISTING
+ */
+
+/** Edit Listing: Place buttons on the side, fixed, on larger screens **/
+.listing-submit-wrap {
+    margin-top: 10px;
+    display: flex !important;
+    justify-content: space-between;
+}
+
+.listing-submit-wrap .btn {
+    border-radius: 6px !important;
+    display: block !important;
+    width: calc(50% - 3px) !important;
+    flex-grow: 0;
+}
+
+@media screen and (min-width: 1200px) {
+    .listing-submit-wrap {
+        position: fixed;
+        top: 550px;
+        right: 30px;
+        width: 310px !important;
+        overflow: hidden;
+        margin-top: 0;
+    }
+}
+
+
+/** Edit Listing: Fix link overflows on the navigation  **/
+
+@media screen and (min-width: 768px) {
+    .homy-taber-module {
+        --outline: #f90 solid 1px;
+    }
+    .homy-taber-module ul > li a {
+        --outline: #f00 solid 1px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        width: 100%;
+        font-size: 1.3rem;
+        padding: 22px 5px;
+    }
+}

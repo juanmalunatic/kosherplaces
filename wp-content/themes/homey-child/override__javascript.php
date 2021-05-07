@@ -4,6 +4,11 @@
 
 function homey_scripts()
 {
+    $data_loaded = include( dirname(__FILE__) . '/override__js_strings.php');
+    // Need this construct as PHPStorm won't recognize the strings otherwise.
+    $kosher_strings = $data_loaded;
+
+    // Original fx
     global $paged, $post, $current_user;
     wp_get_current_user();
     $userID = $current_user->ID;
@@ -236,7 +241,7 @@ function homey_scripts()
             'redirect_type' => $after_login_redirect,
             'login_redirect' => $login_redirect,
             'woo_checkout_url' => esc_url($woo_checkout_url),
-            'login_loading' => esc_html__('Sending user info, please wait...', 'homey'),
+            'login_loading' => $kosher_strings['login_loading'],
             'direct_pay_text' => esc_html__('Processing, Please wait...', 'homey'),
             'processing_text' => esc_html__('Processing, Please wait...', 'homey'),
             'user_id' => $userID,
@@ -532,7 +537,7 @@ function homey_scripts()
             'delete_btn_text' => $homey_local['delete_btn'],
             'cancel_btn_text' => $homey_local['cancel_btn'],
             'confirm_btn_text' => esc_html__('Confirm', 'homey'),
-            'login_loading' => esc_html__('Sending user info, please wait...', 'homey'),
+            'login_loading' => $kosher_strings['login_loading'],
             'processing_text' => esc_html__('Processing, Please wait...', 'homey'),
             'add_listing_msg' => esc_html__('Submitting, Please wait...', 'homey'),
             'both_required' => esc_html__('Both fields required.', 'homey'),

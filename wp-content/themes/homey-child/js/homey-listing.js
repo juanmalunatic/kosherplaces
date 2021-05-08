@@ -1,5 +1,15 @@
 //console.log("Listín");
 
+const waitForEl = function(selector, callback) {
+    if (jQuery(selector).length) {
+        callback();
+    } else {
+        setTimeout(function() {
+            waitForEl(selector, callback);
+        }, 100);
+    }
+};
+
 jQuery(document).ready( function($) {
     "use strict";
 
@@ -88,6 +98,13 @@ jQuery(document).ready( function($) {
             }
           });
         });*/
+
+        waitForEl('button.btn.btn-dark-grey.disabled', function() {
+            // work the magic
+            $(".listing-submit-wrap .btn")
+                .prop('disabled', false)
+                .attr('disabled', false);
+        });
 
         /* ------------------------------------------------------------------------ */
         /*  Listing mode
@@ -1216,7 +1233,7 @@ jQuery(document).ready( function($) {
 
 
         /*--------------------------------------------------------------------------
-         *  Uplaod listing gallery
+         *  Upload listing gallery
          * -------------------------------------------------------------------------*/
         var listing_gallery_images = function() {
 
@@ -1240,6 +1257,17 @@ jQuery(document).ready( function($) {
             });
             plup_uploader.init();
 
+            // Add a div before #homey_errors to place the total progressbar
+            $("#homey_errors").before(
+                '<div id="homey_progress_custom">'     +
+                '  <div id="HomeyProgressText"></div>' +
+                '  <div id="HomeyMyProgress">'         +
+                '    <div id="HomeyMyBar"></div>'      +
+                '  </div>'                             +
+                '</div>'
+            );
+            $("#homey_progress_custom").hide();
+
             plup_uploader.bind('FilesAdded', function(up, files) {
                 var homey_thumbs = "";
                 var maxfiles = '50';//max_prop_images;
@@ -1254,11 +1282,21 @@ jQuery(document).ready( function($) {
                 document.getElementById('homey_gallery_container').innerHTML += homey_thumbs;
                 up.refresh();
                 plup_uploader.start();
+                $("#homey_progress_custom").fadeIn("fast");
             });
 
 
             plup_uploader.bind('UploadProgress', function(up, file) {
-                document.getElementById( "thumb-holder-" + file.id ).innerHTML = '<span>' + file.percent + "%</span>";
+                // This gives the individual percent:
+                // document.getElementById( "thumb-holder-" + file.id ).innerHTML = '<span>' + file.percent + "%</span>";
+                $("#HomeyProgressText").html(
+                    '<div> Uploading images: ' + up.total.percent + ' % </div>'
+                );
+                $('#HomeyMyBar').css('width', up.total.percent + '%');
+            });
+
+            plup_uploader.bind('UploadComplete', function(up, file) {
+                $("#homey_progress_custom").fadeOut("fast");
             });
 
             plup_uploader.bind('Error', function( up, err ) {

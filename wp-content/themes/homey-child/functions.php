@@ -10,6 +10,14 @@ function homey_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'homey_enqueue_styles');
 
+// Disable versions (?x.x.x) on CSS files (development only)
+
+function switch_stylesheet_src( $src, $handle ) {
+    $src = remove_query_arg( 'ver', $src );
+    return $src;
+}
+add_filter( 'style_loader_src', 'switch_stylesheet_src', 10, 2 );
+
 $path_child_theme = get_stylesheet_directory();
 
 // Partial overrides for placehold.it
@@ -20,4 +28,5 @@ require($path_child_theme . '/override__add-listing.php');
 
 // Overrides for parent theme JS scripts
 require($path_child_theme . '/override__javascript.php')
+
 ?>

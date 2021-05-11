@@ -1,5 +1,4 @@
 jQuery(document).ready(function ($) {
-    "use strict";
 
     const waitForEl = function(selector, callback) {
         if (jQuery(selector).length) {
@@ -3142,4 +3141,23 @@ jQuery(document).ready(function ($) {
     }
 
     attempt_reservationrequest_recovery();
+
+    /** --------------------------------------------------------
+     * Details: Add default size unit
+     -----------------------------------------------------------*/
+
+    // Find the element with "Size:".
+    $element = false;
+    $(".details-section .detail-list-2-cols li").each( function(index, element) {
+        var text = $(element).html().trim();
+        if (text.includes('Size:') === true) {
+            $element = $(element);
+        }
+    });
+
+    // Modify the text
+    if ($element) {
+        $element.find("strong").first().append(" sq. ft");
+    }
+
 }); // end document ready

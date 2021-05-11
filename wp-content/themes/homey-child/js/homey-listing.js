@@ -99,12 +99,45 @@ jQuery(document).ready( function($) {
           });
         });*/
 
+        // ------------------------------------------------------
+        // Force enable "Update" button on listing view.
+        // ------------------------------------------------------
+
         waitForEl('button.btn.btn-dark-grey.disabled', function() {
             // work the magic
             $(".listing-submit-wrap .btn")
                 .prop('disabled', false)
                 .attr('disabled', false);
         });
+
+        // ------------------------------------------------------
+        // Make sure view/update buttons are properly positioned.
+        // ------------------------------------------------------
+
+        var $sidebar_image  = $(".dashboard-sidebar .media-image a img").first();
+        var $buttons_holder = $(".listing-submit-wrap");
+        var $sidebar_box    = $(".dashboard-sidebar");
+
+        function placeButtonsHolder($sidebar_box, $buttons_holder) {
+            var _bottom_of_box = $sidebar_box.outerHeight(true) + $sidebar_box.position().top; //+ $el.offset().top;
+            $buttons_holder.first().css({
+                "top": _bottom_of_box + "px",
+                "bottom": "auto"
+            });
+        }
+
+        // There are two scenarios: with and without lazy loading
+        var is_lazyloading_scenario = $sidebar_image.hasClass("lazyloading") || $sidebar_image.hasClass("lazyloaded");
+        if (is_lazyloading_scenario) {
+            // Wait for load
+            waitForEl('.dashboard-sidebar .media-image a img.lazyloaded', () => {
+                placeButtonsHolder($sidebar_box, $buttons_holder);
+            })
+        } else {
+            $sidebar_image.on("load", () => {
+                placeButtonsHolder($sidebar_box, $buttons_holder);
+            });
+        }
 
         /* ------------------------------------------------------------------------ */
         /*  Listing mode

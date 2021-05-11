@@ -160,7 +160,7 @@ EDIT LISTING
 @media screen and (min-width: 1200px) {
     .listing-submit-wrap {
         position: fixed;
-        top: 550px;
+        bottom: 100px; /* Fallback position; this is set via JS */
         right: 30px;
         width: 310px !important;
         overflow: hidden;

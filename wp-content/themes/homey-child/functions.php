@@ -12,11 +12,13 @@ add_action('wp_enqueue_scripts', 'homey_enqueue_styles');
 
 // Disable versions (?x.x.x) on CSS files (development only)
 
-function switch_stylesheet_src( $src, $handle ) {
-    $src = remove_query_arg( 'ver', $src );
+function remove_css_js_version( $src ) {
+    if( strpos( $src, '?ver=' ) )
+        $src = remove_query_arg( 'ver', $src );
     return $src;
 }
-add_filter( 'style_loader_src', 'switch_stylesheet_src', 10, 2 );
+add_filter( 'style_loader_src', 'remove_css_js_version', 9999 );
+add_filter( 'script_loader_src', 'remove_css_js_version', 9999 );
 
 $path_child_theme = get_stylesheet_directory();
 

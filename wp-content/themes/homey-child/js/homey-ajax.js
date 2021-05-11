@@ -1223,6 +1223,13 @@ jQuery(document).ready(function ($) {
          $('#request_for_reservation, #request_for_reservation_mobile').on('click', function(e){
             e.preventDefault();
 
+            // Check form completion before sending
+            updateFieldsOutlines();
+            if (isIncompleteForm()) {
+                return;
+            }
+            //\Check form completion before sending
+
             var $this = $(this);
             var extra_options = []; 
             var temp_opt;
@@ -1616,10 +1623,17 @@ jQuery(document).ready(function ($) {
         }
 
          /* ------------------------------------------------------------------------ */
-        /*  Instace Booking
+        /*  Instant Booking
          /* ------------------------------------------------------------------------ */
          $('#instance_reservation, #instance_reservation_mobile').on('click', function(e){
             e.preventDefault();
+
+             // Check form completion before sending
+             updateFieldsOutlines();
+             if (isIncompleteForm()) {
+                 return;
+             }
+             //\Check form completion before sending
 
             var extra_options = [];
             var temp_opt;
@@ -3142,9 +3156,9 @@ jQuery(document).ready(function ($) {
 
     attempt_reservationrequest_recovery();
 
-    /** --------------------------------------------------------
-     * Details: Add default size unit
-     -----------------------------------------------------------*/
+    /* ------------------------------------------------------------------------ */
+    /*  Details: Add default size unit
+    /* ------------------------------------------------------------------------ */
 
     // Find the element with "Size:".
     $element = false;
@@ -3158,6 +3172,45 @@ jQuery(document).ready(function ($) {
     // Modify the text
     if ($element) {
         $element.find("strong").first().append(" sq. ft");
+    }
+
+    /* ------------------------------------------------------------------------ */
+    /*  Reservation: Check that fields are filled before any booking type
+    /* ------------------------------------------------------------------------ */
+
+    var requiredFields = [
+        'input[name="arrive"]',
+        'input[name="depart"]',
+        'input[name="guests"]',
+        'textarea[name="guest_message"]',
+    ];
+
+    function isIncompleteForm() {
+        for (field of requiredFields) {
+            var value = $(field).val().trim();
+            console.log(value)
+            if (value === "") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function updateFieldsOutlines() {
+        for (field of requiredFields) {
+            var value = $(field).val().trim();
+            var css = '';
+            if (value === "") {
+                css = {
+                    'border': '#f00 solid 1px'
+                }
+            } else {
+                css = {
+                    'border': 'rgb(216, 220, 225) solid 1px'
+                }
+            }
+            $(field).css(css);
+        }
     }
 
 }); // end document ready

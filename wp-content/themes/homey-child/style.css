@@ -214,3 +214,12 @@ ADD LISTING
     background-color: #80c487;
     border-radius: 5px;
 }
+
+/**
+LOGIN
+ */
+
+/* White bg only for login page */
+body.um-page-login {
+    background: #fff;
+}

@@ -2529,7 +2529,75 @@ jQuery(document).ready( function($) {
 
         });
 
+        /*--------------------------------------------------------------------------
+         *  Bedroom section: force minimum/maximum bedroom information
+         * -------------------------------------------------------------------------*/
 
+        var $buttonContinue = $(".steps-nav button.btn-success:contains('Continue')");
+        console.log("buttonContinue", $buttonContinue);
+
+        var isButtonContinuePresent = ($buttonContinue.length > 0);
+        console.log("isButtonContinuePresent", isButtonContinuePresent);
+
+        var enforceBedroomDetails = function() {
+            var $buttonAdd = $("#add_more_bedrooms");
+            var $buttonsRem = $(".remove-beds");
+
+            var totalBedrooms = parseInt($("#listing_bedrooms").val());
+            console.log("totalBedrooms", totalBedrooms);
+
+            var placedBedrooms = $("#more_bedrooms_main").find(".more_rooms_wrap").length;
+            console.log("placedBedrooms", placedBedrooms);
+
+            var completed = (totalBedrooms - placedBedrooms) === 0;
+
+            if (completed) {
+
+                $buttonAdd     .prop("disabled", true);
+                $buttonsRem    .prop("disabled", true);
+                $buttonContinue.prop("disabled", false);
+
+            } else {
+                $buttonAdd     .prop("disabled", false);
+                $buttonContinue.prop("disabled", true);
+
+                if (placedBedrooms === 1) {
+                    $buttonsRem.prop("disabled", true);
+                } else {
+                    $buttonsRem.prop("disabled", false);
+                }
+            }
+
+        }
+
+        var enforceFilledBedrooms = function() {
+            // Implement error messages here or continue if filled.
+        }
+
+        var routeCurrentLocation = function () {
+            var $bedroomsTitle = $(".form-step.active h2.title:contains('Bedrooms')");
+            var $locationTitle = $(".form-step.active h2.title:contains('Location')");
+            var isBedroomsTabActive = ($bedroomsTitle.length > 0);
+            var isLocationTabActive = ($locationTitle.length > 0);
+
+            if (isBedroomsTabActive) {
+                // Initial call
+                enforceBedroomDetails();
+
+                // Update every time the number of bedrooms changes
+                //setInterval(enforceBedroomDetails, 300);
+                var $buttonAdd  = $("#add_more_bedrooms");
+                var $buttonsRem = $(".remove-beds");
+                $buttonAdd .on("click", enforceBedroomDetails);
+                $buttonsRem.on("click", enforceBedroomDetails);
+
+                $buttonContinue.on("click", enforceFilledBedrooms);
+            }
+        }
+
+        if (isButtonContinuePresent) {
+            $buttonContinue.on("click", routeCurrentLocation);
+        }
 
     } // End Type Of
 
